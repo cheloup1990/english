@@ -1,21 +1,8 @@
-# Better English V10.5d — Leçons interactives reforgées
+# Better English V10.5e
+
+Correctif build Vercel.
 
 ## Corrigé
-- Le bouton Ouvrir ne renvoie plus vers S'entraîner.
-- Une vraie page de leçon s'ouvre dans l'application.
-- La leçon Prononciation des lettres contient :
-  - les 26 lettres ;
-  - bouton Écouter ;
-  - quiz d'écoute intégré ;
-  - compteur 1/26 ;
-  - bouton Réécouter ;
-  - cycle aléatoire sans répétition ;
-  - nouveau mélange après les 26 lettres.
-- Pas d'IPA affichée.
-- Le bouton S'entraîner n'est plus utilisé dans cette leçon.
-
-## Déployer
-```bash
-npm run build
-```
-Puis commit + push.
+- Suppression de la double déclaration `speakEnglish`.
+- Suppression des fonctions dupliquées liées aux leçons.
+- Conservation du système de leçon interactive et du quiz des lettres.

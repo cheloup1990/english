@@ -5,7 +5,7 @@ import { Home, PenLine, BookOpen, User } from "lucide-react";
 import { CARDS, THEMES, generateExercises, QUALITY_REPORT, normalize, LESSONS, CHAPTERS } from "./data";
 import "./styles.css";
 
-const KEY = "better-english-v10-5d";
+const KEY = "better-english-v10-5e";
 
 const defaultState = {
   name: "Jeremy",
@@ -512,7 +512,7 @@ function App() {
         <section className="screen active">
           <div className="hero-card">
             <div className="hero-inner">
-              <div className="hero-label">V10.5ddc.5a.5.4.3a</div>
+              <div className="hero-label">V10.5edc.5a.5.4.3a</div>
               <h2 className="hero-title">Leçons interactives</h2>
               <p className="hero-sub">Better English apprend l’anglais qu’on rencontre dans la vraie vie, pas l’anglais des manuels scolaires.</p>
               <div className="progress"><span style={{ width: `${state.xp % 100}%` }} /></div>
@@ -702,21 +702,6 @@ function Filter({ title, label, id, open, setOpen, children }) {
   </div>;
 }
 
-
-
-
-function speakEnglish(text) {
-  try {
-    if (!("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
-    utterance.rate = 0.75;
-    window.speechSynthesis.speak(utterance);
-  } catch (e) {
-    console.warn("Speech synthesis unavailable", e);
-  }
-}
 
 
 
