@@ -480,3 +480,35 @@ button,input{font:inherit}button{border:0;cursor:pointer;-webkit-tap-highlight-c
   font-weight:950;
   color:var(--violet-dark);
 }
+
+/* --- V10.4 Smart Correction --- */
+.exercise-instruction{
+  margin:-4px 0 14px;
+  padding:11px 13px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#FFFFFF 0%,#F6F1FF 100%);
+  border:1px solid #DED3FF;
+  color:var(--violet-dark);
+  font-weight:900;
+  line-height:1.35;
+}
+.correction-details{
+  margin:12px 0;
+  padding:13px 14px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#FFFFFF 0%,#F7F3FF 100%);
+  border:1px solid #E1D7FF;
+}
+.correction-details b{
+  display:block;
+  color:var(--violet-dark);
+  margin-bottom:8px;
+}
+.correction-details p{
+  margin:6px 0!important;
+  font-weight:800;
+  color:#3C315A;
+}
+.feedback.good{background:linear-gradient(145deg,#F4FFF8 0%,#ECFFF4 100%)!important}
+.feedback.soft{background:linear-gradient(145deg,#FFFCF0 0%,#FFF6E5 100%)!important}
+.feedback.bad{background:linear-gradient(145deg,#FFF7F8 0%,#FFF0F2 100%)!important}

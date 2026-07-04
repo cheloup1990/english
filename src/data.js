@@ -11972,7 +11972,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: Nice to meet you.",
-        "fr": "Tu peux dire : Enchanté.",
+        "fr": "Enchanté.",
         "tense": null
       }
     ],
@@ -12007,7 +12007,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: How are you?.",
-        "fr": "Tu peux dire : Ça va ?.",
+        "fr": "Ça va ?.",
         "tense": null
       }
     ],
@@ -12042,7 +12042,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: I'm good.",
-        "fr": "Tu peux dire : Je vais bien.",
+        "fr": "Je vais bien.",
         "tense": null
       }
     ],
@@ -12077,7 +12077,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: No problem.",
-        "fr": "Tu peux dire : Pas de problème.",
+        "fr": "Pas de problème.",
         "tense": null
       }
     ],
@@ -12112,7 +12112,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: No worries.",
-        "fr": "Tu peux dire : Pas de souci.",
+        "fr": "Pas de souci.",
         "tense": null
       }
     ],
@@ -12147,7 +12147,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: Wait a second.",
-        "fr": "Tu peux dire : Attends une seconde.",
+        "fr": "Attends une seconde.",
         "tense": null
       }
     ],
@@ -12182,7 +12182,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: I'll be back.",
-        "fr": "Tu peux dire : Je reviens.",
+        "fr": "Je reviens.",
         "tense": null
       }
     ],
@@ -12217,7 +12217,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: I'm ready.",
-        "fr": "Tu peux dire : Je suis prêt.",
+        "fr": "Je suis prêt.",
         "tense": null
       }
     ],
@@ -12252,7 +12252,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: I'm not sure.",
-        "fr": "Tu peux dire : Je ne suis pas sûr.",
+        "fr": "Je ne suis pas sûr.",
         "tense": null
       }
     ],
@@ -12287,7 +12287,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: I think so.",
-        "fr": "Tu peux dire : Je pense que oui.",
+        "fr": "Je pense que oui.",
         "tense": null
       }
     ],
@@ -12322,7 +12322,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: I don't think so.",
-        "fr": "Tu peux dire : Je pense que non.",
+        "fr": "Je pense que non.",
         "tense": null
       }
     ],
@@ -12357,7 +12357,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: Sounds good.",
-        "fr": "Tu peux dire : Ça a l'air bien.",
+        "fr": "Ça a l'air bien.",
         "tense": null
       }
     ],
@@ -12392,7 +12392,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: It doesn't matter.",
-        "fr": "Tu peux dire : Peu importe.",
+        "fr": "Peu importe.",
         "tense": null
       }
     ],
@@ -12427,7 +12427,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: As you wish.",
-        "fr": "Tu peux dire : Comme tu veux.",
+        "fr": "Comme tu veux.",
         "tense": null
       }
     ],
@@ -12462,7 +12462,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: I agree.",
-        "fr": "Tu peux dire : Je suis d'accord.",
+        "fr": "Je suis d'accord.",
         "tense": null
       }
     ],
@@ -12497,7 +12497,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: I disagree.",
-        "fr": "Tu peux dire : Je ne suis pas d'accord.",
+        "fr": "Je ne suis pas d'accord.",
         "tense": null
       }
     ],
@@ -12532,7 +12532,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: That's a shame.",
-        "fr": "Tu peux dire : C'est dommage.",
+        "fr": "C'est dommage.",
         "tense": null
       }
     ],
@@ -12567,7 +12567,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: That makes sense.",
-        "fr": "Tu peux dire : C'est logique.",
+        "fr": "C'est logique.",
         "tense": null
       }
     ],
@@ -12602,7 +12602,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: That's weird.",
-        "fr": "Tu peux dire : C'est bizarre.",
+        "fr": "C'est bizarre.",
         "tense": null
       }
     ],
@@ -12637,7 +12637,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: That's amazing.",
-        "fr": "Tu peux dire : C'est incroyable.",
+        "fr": "C'est incroyable.",
         "tense": null
       }
     ],
@@ -12672,7 +12672,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: Who are you?.",
-        "fr": "Tu peux dire : Qui es-tu ?.",
+        "fr": "Qui es-tu ?.",
         "tense": null
       }
     ],
@@ -12707,7 +12707,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: Where are you?.",
-        "fr": "Tu peux dire : Où es-tu ?.",
+        "fr": "Où es-tu ?.",
         "tense": null
       }
     ],
@@ -12742,7 +12742,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: When are you arriving?.",
-        "fr": "Tu peux dire : Quand arrives-tu ?.",
+        "fr": "Quand arrives-tu ?.",
         "tense": null
       }
     ],
@@ -12777,7 +12777,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: Why?.",
-        "fr": "Tu peux dire : Pourquoi ?.",
+        "fr": "Pourquoi ?.",
         "tense": null
       }
     ],
@@ -12812,7 +12812,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: How?.",
-        "fr": "Tu peux dire : Comment ?.",
+        "fr": "Comment ?.",
         "tense": null
       }
     ],
@@ -12847,7 +12847,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: How much is it?.",
-        "fr": "Tu peux dire : Combien ça coûte ?.",
+        "fr": "Combien ça coûte ?.",
         "tense": null
       }
     ],
@@ -12882,7 +12882,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: How old are you?.",
-        "fr": "Tu peux dire : Quel âge as-tu ?.",
+        "fr": "Quel âge as-tu ?.",
         "tense": null
       }
     ],
@@ -12917,7 +12917,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: Are you coming?.",
-        "fr": "Tu peux dire : Tu viens ?.",
+        "fr": "Tu viens ?.",
         "tense": null
       }
     ],
@@ -12952,7 +12952,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: Can you help me?.",
-        "fr": "Tu peux dire : Tu peux m'aider ?.",
+        "fr": "Tu peux m'aider ?.",
         "tense": null
       }
     ],
@@ -12987,7 +12987,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "You can say: Do you understand?.",
-        "fr": "Tu peux dire : Tu comprends ?.",
+        "fr": "Tu comprends ?.",
         "tense": null
       }
     ],

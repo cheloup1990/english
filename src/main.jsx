@@ -5,7 +5,7 @@ import { Home, PenLine, BookOpen, User } from "lucide-react";
 import { CARDS, THEMES, generateExercises, QUALITY_REPORT, normalize, LESSONS, CHAPTERS } from "./data";
 import "./styles.css";
 
-const KEY = "better-english-v10-3b";
+const KEY = "better-english-v10-4";
 
 const defaultState = {
   name: "Jeremy",
@@ -47,6 +47,130 @@ function distance(a, b) {
   }
   return dp[a.length][b.length];
 }
+
+function numberWordsToDigits(value) {
+  const map = {
+    "zero":"0","zéro":"0","un":"1","une":"1","deux":"2","trois":"3","quatre":"4","cinq":"5",
+    "six":"6","sept":"7","huit":"8","neuf":"9","dix":"10","onze":"11","douze":"12","treize":"13",
+    "quatorze":"14","quinze":"15","seize":"16","vingt":"20","trente":"30","quarante":"40",
+    "cinquante":"50","soixante":"60","cent":"100","cents":"100"
+  };
+  return String(value || "").replace(/\b(zéro|zero|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|treize|quatorze|quinze|seize|vingt|trente|quarante|cinquante|soixante|cent|cents)\b/gi, (m) => map[m.toLowerCase()] || m);
+}
+
+function normalizeSmart(value) {
+  return numberWordsToDigits(value)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[’`´]/g, "'")
+    .replace(/[.,!?;:]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function tokenList(value) {
+  return normalizeSmart(value).split(" ").filter(Boolean);
+}
+
+function singularizeToken(t) {
+  if (t.length > 3 && t.endsWith("s")) return t.slice(0, -1);
+  return t;
+}
+
+function looseNoPlural(value) {
+  return tokenList(value).map(singularizeToken).join(" ");
+}
+
+function missingWords(user, expected) {
+  const userSet = new Set(tokenList(user).map(singularizeToken));
+  return tokenList(expected).filter(t => !userSet.has(singularizeToken(t)));
+}
+
+function detectSmallErrors(user, expected) {
+  const errors = [];
+  const u = normalizeSmart(user);
+  const e = normalizeSmart(expected);
+  if (u === e) return errors;
+
+  if (looseNoPlural(user) === looseNoPlural(expected)) {
+    const uTokens = tokenList(user);
+    const eTokens = tokenList(expected);
+    eTokens.forEach((tok, i) => {
+      if (uTokens[i] && singularizeToken(uTokens[i]) === singularizeToken(tok) && uTokens[i] !== tok) {
+        errors.push(`Accord : "${uTokens[i]}" → "${tok}"`);
+      }
+    });
+  }
+
+  const missing = missingWords(user, expected).filter(w => w.length > 2);
+  if (missing.length && missing.length <= 3) {
+    errors.push(`Mot${missing.length > 1 ? "s" : ""} manquant${missing.length > 1 ? "s" : ""} : ${missing.join(", ")}`);
+  }
+
+  return [...new Set(errors)];
+}
+
+function smartScore(user, expected, accepted = []) {
+  const allExpected = [expected, ...(accepted || [])].filter(Boolean);
+  const normalizedUser = normalizeSmart(user);
+
+  for (const exp of allExpected) {
+    if (normalizedUser === normalizeSmart(exp)) {
+      return { score: 100, label: "Excellent", type: "good", errors: ["Aucune erreur."], expected: exp };
+    }
+  }
+
+  for (const exp of allExpected) {
+    if (looseNoPlural(user) === looseNoPlural(exp)) {
+      return { score: 95, label: "Très bien", type: "good", errors: detectSmallErrors(user, exp), expected: exp };
+    }
+  }
+
+  let best = { score: 0, expected };
+  for (const exp of allExpected) {
+    const u = normalizeSmart(user);
+    const e = normalizeSmart(exp);
+    const maxLen = Math.max(u.length, e.length, 1);
+    const dist = distance(u, e);
+    const similarity = Math.max(0, Math.round((1 - dist / maxLen) * 100));
+    const uTokens = new Set(tokenList(user).map(singularizeToken));
+    const eTokens = tokenList(exp).map(singularizeToken);
+    const matched = eTokens.filter(t => uTokens.has(t)).length;
+    const tokenScore = eTokens.length ? Math.round((matched / eTokens.length) * 100) : 0;
+    const score = Math.round(similarity * 0.55 + tokenScore * 0.45);
+    if (score > best.score) best = { score, expected: exp };
+  }
+
+  if (best.score >= 90) return { score: best.score, label: "Très bien", type: "good", errors: detectSmallErrors(user, best.expected), expected: best.expected };
+  if (best.score >= 70) {
+    const errs = detectSmallErrors(user, best.expected);
+    return { score: best.score, label: "Presque", type: "soft", errors: errs.length ? errs : ["Le sens est proche, mais la réponse est incomplète ou contient plusieurs erreurs."], expected: best.expected };
+  }
+  return { score: best.score, label: "À revoir", type: "bad", errors: ["La traduction ne correspond pas encore assez à la réponse attendue."], expected: best.expected };
+}
+
+function instructionFor(ex) {
+  if (!ex) return "";
+  if (ex.type === "phrase") return ex.direction === "en-fr" ? "Traduis la phrase entière en français." : "Traduis la phrase entière en anglais.";
+  if (ex.type === "translate") {
+    if (ex.isPhrase) return ex.direction === "en-fr" ? "Traduis la phrase entière en français." : "Traduis la phrase entière en anglais.";
+    return ex.direction === "en-fr" ? "Traduis ce mot ou cette expression en français." : "Traduis ce mot ou cette expression en anglais.";
+  }
+  if (ex.type === "fill") return "Complète la phrase avec le mot manquant.";
+  if (ex.type === "conjugation") return "Écris la forme demandée du verbe.";
+  if (ex.type === "choice") return "Choisis la bonne réponse.";
+  return "";
+}
+
+function placeholderFor(ex) {
+  if (!ex) return "Écris ta réponse…";
+  if (ex.type === "phrase" || (ex.type === "translate" && ex.isPhrase)) return "Écris la traduction complète…";
+  if (ex.type === "translate") return "Écris la traduction…";
+  if (ex.type === "conjugation") return "Écris la forme du verbe…";
+  return "Écris ta réponse…";
+}
+
 
 function phraseKey(ex) {
   return ex?.phraseKey || ex?.sourceId || normalize(ex?.answer || ex?.question || "");
@@ -267,12 +391,18 @@ function App() {
   }
 
   function evaluate(value, ex) {
-    const n = normalize(value);
-    const accepted = (ex.accepted || []).map(normalize);
-    const ans = normalize(ex.answer);
-    if (n === ans || accepted.includes(n)) return { type: "good", title: "Correct", msg: "Bien joué." };
-    if (ans.length > 4 && distance(n, ans) <= 2) return { type: "soft", title: "Très proche", msg: `Petite faute. Réponse attendue : ${ex.answer}.` };
-    return { type: "bad", title: "À revoir", msg: `Réponse attendue : ${ex.answer}.` };
+    const result = smartScore(value, ex.answer, ex.accepted || []);
+    const title = `${result.label} — ${result.score}%`;
+    if (result.score === 100) {
+      return { type: "good", title, msg: "Réponse correcte.", score: result.score, errors: result.errors };
+    }
+    if (result.score >= 90) {
+      return { type: "good", title, msg: "Le sens est correct. Il reste une petite erreur.", score: result.score, errors: result.errors };
+    }
+    if (result.score >= 70) {
+      return { type: "soft", title, msg: `Réponse proche. Réponse attendue : ${ex.answer}.`, score: result.score, errors: result.errors };
+    }
+    return { type: "bad", title, msg: `Réponse attendue : ${ex.answer}.`, score: result.score, errors: result.errors };
   }
 
   function checkAnswer() {
@@ -363,8 +493,8 @@ function App() {
         <section className="screen active">
           <div className="hero-card">
             <div className="hero-inner">
-              <div className="hero-label">V10.3b.3a</div>
-              <h2 className="hero-title">Leçons A1</h2>
+              <div className="hero-label">V10.4.4.3a</div>
+              <h2 className="hero-title">Correction intelligente</h2>
               <p className="hero-sub">Better English apprend l’anglais qu’on rencontre dans la vraie vie, pas l’anglais des manuels scolaires.</p>
               <div className="progress"><span style={{ width: `${state.xp % 100}%` }} /></div>
               <button className="btn full" onClick={() => setTab("exercise")}>Continuer</button>
@@ -439,6 +569,7 @@ function App() {
               <>
                 <h2 className="chapter-title">{titleFor(current)}</h2>
                 <h3 className="question">{current.question}</h3>
+                {instructionFor(current) && <p className="exercise-instruction">{instructionFor(current)}</p>}
                 <div className="info-grid">
                   {(current.type === "translate" || current.type === "phrase" || current.type === "choice") && current.direction && <Info label="Sens" value={current.direction === "fr-en" ? "Français → Anglais" : current.direction === "en-fr" ? "Anglais → Français" : "Mix"} />}
                   {current.type === "choice" && current.qcmKind === "verb_sentence" && current.hint && <Info label="Verbe" value={current.hint} />}
@@ -457,7 +588,7 @@ function App() {
                     {current.options.map(opt => <button key={opt} className={`choice-btn ${selected===opt ? "selected" : ""}`} onClick={() => setSelected(opt)}>{opt}</button>)}
                   </div>
                 ) : (
-                  <input className="answer" disabled={!!feedback && !feedback.empty} value={answer} onChange={e=>setAnswer(e.target.value)} onKeyDown={e=>e.key==="Enter"&&checkAnswer()} placeholder="Écris ta réponse…" />
+                  <input className="answer" disabled={!!feedback && !feedback.empty} value={answer} onChange={e=>setAnswer(e.target.value)} onKeyDown={e=>e.key==="Enter"&&checkAnswer()} placeholder={placeholderFor(current)} />
                 )}
 
                 <div className="row">
@@ -472,6 +603,12 @@ function App() {
                     {!feedback.empty && (
                       <>
                         <div className="example"><b>{expectedLabel(current)}</b><br />{current.answer}</div>
+                        {feedback.errors?.length > 0 && (
+                          <div className="correction-details">
+                            <b>Analyse</b>
+                            {feedback.errors.map((err, idx) => <p key={idx}>• {err}</p>)}
+                          </div>
+                        )}
                         {current.translation && <div className="example"><b>Traduction</b><br />{current.translation}</div>}
                         {current.explain && <p>{current.explain}</p>}
                         {current.isVerb && current.forms && (
