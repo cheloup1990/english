@@ -5,7 +5,7 @@ import { Home, PenLine, BookOpen, User } from "lucide-react";
 import { CARDS, THEMES, generateExercises, QUALITY_REPORT, normalize, LESSONS, CHAPTERS } from "./data";
 import "./styles.css";
 
-const KEY = "better-english-v10-5e";
+const KEY = "better-english-v10-5f";
 
 const defaultState = {
   name: "Jeremy",
@@ -473,7 +473,19 @@ function App() {
       </header>
 
       <div className={`top-tabs ${navHidden ? "hide" : ""}`}>
-        {nav.map(([id,label]) => <button key={id} className={tab===id ? "active" : ""} onClick={() => setTab(id)}>{label}</button>)}
+        {nav.map(([id,label]) => (
+          <button
+            key={id}
+            className={tab===id ? "active" : ""}
+            onClick={() => {
+              setActiveLesson(null);
+              setChapterTest(null);
+              setTab(id);
+            }}
+          >
+            {label}
+          </button>
+        ))}
       </div>
 
       {chapterTest && (
@@ -494,13 +506,23 @@ function App() {
             lesson={activeLesson}
             onBack={() => setActiveLesson(null)}
             done={!!state.completedLessons?.[activeLesson.id]}
+            onGoExercise={() => {
+              setActiveLesson(null);
+              setTab("exercise");
+            }}
             onComplete={() => {
               setState((s) => ({
                 ...s,
                 completedLessons: { ...(s.completedLessons || {}), [activeLesson.id]: true },
                 xp: s.xp + 30,
               }));
-              setActiveLesson(null);
+            }}
+            onUndoComplete={() => {
+              setState((s) => {
+                const nextCompleted = { ...(s.completedLessons || {}) };
+                delete nextCompleted[activeLesson.id];
+                return { ...s, completedLessons: nextCompleted };
+              });
             }}
           />
         </section>
@@ -512,7 +534,7 @@ function App() {
         <section className="screen active">
           <div className="hero-card">
             <div className="hero-inner">
-              <div className="hero-label">V10.5edc.5a.5.4.3a</div>
+              <div className="hero-label">V10.5fdc.5a.5.4.3a</div>
               <h2 className="hero-title">Leçons interactives</h2>
               <p className="hero-sub">Better English apprend l’anglais qu’on rencontre dans la vraie vie, pas l’anglais des manuels scolaires.</p>
               <div className="progress"><span style={{ width: `${state.xp % 100}%` }} /></div>
@@ -779,7 +801,7 @@ function ChapterBlock({ chapter, lessons, completed, tests, onOpenLesson, onTest
   );
 }
 
-function LessonPlayer({ lesson, onBack, onComplete, done }) {
+function LessonPlayer({ lesson, onBack, onComplete, onUndoComplete, onGoExercise, done }) {
   const isLetterLesson = lesson.interactiveType === "letter_pronunciation" || lesson.letterSounds?.length;
 
   return (
@@ -813,9 +835,12 @@ function LessonPlayer({ lesson, onBack, onComplete, done }) {
         {(lesson.summary || []).map((item, index) => <p key={index}>✓ {item}</p>)}
       </div>
 
-      <button type="button" className="btn full" onClick={onComplete}>
-        {done ? "Leçon déjà terminée" : "Terminer la leçon"}
-      </button>
+      <div className="row lesson-actions">
+        <button type="button" className="btn" onClick={onGoExercise}>Aller aux exercices</button>
+        <button type="button" className="btn secondary" onClick={done ? onUndoComplete : onComplete}>
+          {done ? "Annuler la validation" : "Terminer la leçon"}
+        </button>
+      </div>
     </div>
   );
 }
@@ -835,7 +860,7 @@ function LetterPronunciationLesson({ letters }) {
       feedback: "",
       completedCycles: 0
     });
-    setTimeout(() => speakEnglish(current.speech || current.letter), 150);
+    setTimeout(() => speakEnglish(current.audioText || current.speech || current.letter), 150);
   }
 
   function choose(letter) {
@@ -845,7 +870,7 @@ function LetterPronunciationLesson({ letters }) {
       return {
         ...q,
         selected: letter,
-        feedback: good ? "Correct." : `À revoir. C'était la lettre ${q.current.letter}.`
+        feedback: good ? "Correct." : `Raté. La bonne réponse était ${q.current.letter}.`
       };
     });
   }
@@ -858,7 +883,7 @@ function LetterPronunciationLesson({ letters }) {
       if (nextIndex >= q.cycle.length) {
         const newCycle = shuffleArray(letters);
         const current = newCycle[0];
-        setTimeout(() => speakEnglish(current.speech || current.letter), 150);
+        setTimeout(() => speakEnglish(current.audioText || current.speech || current.letter), 150);
         return {
           cycle: newCycle,
           index: 0,
@@ -871,7 +896,7 @@ function LetterPronunciationLesson({ letters }) {
       }
 
       const current = q.cycle[nextIndex];
-      setTimeout(() => speakEnglish(current.speech || current.letter), 150);
+      setTimeout(() => speakEnglish(current.audioText || current.speech || current.letter), 150);
       return {
         ...q,
         index: nextIndex,
@@ -889,7 +914,7 @@ function LetterPronunciationLesson({ letters }) {
         {letters.map((item) => (
           <div className="letter-sound-card" key={item.letter}>
             <strong>{item.letter}</strong>
-            <button type="button" onClick={() => speakEnglish(item.speech || item.letter)}>Écouter</button>
+            <button type="button" onClick={() => speakEnglish(item.audioText || item.speech || item.letter)}>Écouter</button>
           </div>
         ))}
       </div>
@@ -908,7 +933,7 @@ function LetterPronunciationLesson({ letters }) {
         ) : (
           <>
             <p className="muted">Quelle lettre viens-tu d'entendre ?</p>
-            <button type="button" className="btn full replay-btn" onClick={() => speakEnglish(quiz.current.speech || quiz.current.letter)}>Réécouter</button>
+            <button type="button" className="btn full replay-btn" onClick={() => speakEnglish(quiz.current.audioText || quiz.current.speech || quiz.current.letter)}>Réécouter</button>
 
             <div className="letter-options">
               {quiz.options.map((option) => (
@@ -923,7 +948,7 @@ function LetterPronunciationLesson({ letters }) {
               ))}
             </div>
 
-            {quiz.feedback && <p className={`letter-feedback ${quiz.feedback === "Correct." ? "good" : "soft"}`}>{quiz.feedback}</p>}
+            {quiz.feedback && <p className={`letter-feedback ${quiz.feedback === "Correct." ? "good" : "bad"}`}>{quiz.feedback}</p>}
 
             <button
               type="button"
