@@ -512,3 +512,47 @@ button,input{font:inherit}button{border:0;cursor:pointer;-webkit-tap-highlight-c
 .feedback.good{background:linear-gradient(145deg,#F4FFF8 0%,#ECFFF4 100%)!important}
 .feedback.soft{background:linear-gradient(145deg,#FFFCF0 0%,#FFF6E5 100%)!important}
 .feedback.bad{background:linear-gradient(145deg,#FFF7F8 0%,#FFF0F2 100%)!important}
+
+/* --- V10.5a Letter pronunciation lesson --- */
+.letter-sound-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin:12px 0 14px;
+}
+.letter-sound-card{
+  display:grid;
+  grid-template-columns:42px 1fr auto;
+  align-items:center;
+  gap:10px;
+  padding:11px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#FFFFFF,#F7F3FF);
+  border:1px solid #E3DAFF;
+}
+.letter-sound-card strong{
+  font-size:24px;
+  color:var(--violet-dark);
+}
+.letter-sound-card code{
+  font-size:15px;
+  font-weight:900;
+  color:#2F244A;
+  background:#F0EAFF;
+  border:1px solid #DFD2FF;
+  border-radius:999px;
+  padding:6px 9px;
+  text-align:center;
+}
+.letter-sound-card button{
+  border:0;
+  border-radius:999px;
+  padding:8px 10px;
+  background:linear-gradient(135deg,#6D4AFF,#8D6DFF);
+  color:#fff;
+  font-weight:950;
+  cursor:pointer;
+}
+@media(max-width:520px){
+  .letter-sound-grid{grid-template-columns:1fr}
+}

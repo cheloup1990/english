@@ -1,29 +1,23 @@
-# Better English V10.5 — Base nettoyée
+# Better English V10.5a — Prononciation + base propre
 
-Version centrée uniquement sur la correction de la base.
+## Inclus
+- Première leçon renommée : Prononciation des lettres.
+- 26 lettres avec :
+  - lettre
+  - bouton Écouter
+  - transcription IPA
+- Audio via la synthèse vocale du navigateur.
+- Nettoyage supplémentaire de la base.
+- Suppression/correction des phrases artificielles restantes.
 
-## Objectif
-Supprimer les erreurs classiques et les phrases générées artificiellement.
-
-## Corrections
-- Suppression/correction des phrases parasites :
-  - Tu peux dire :
-  - You can say:
-  - On dit :
-  - En anglais :
-  - People often write ...
-- Correction des phrases non naturelles :
-  - J'ai nez qui coule → J'ai le nez qui coule.
-  - People often write no worries online → No worries!
-  - People often write NGL online → NGL means “not gonna lie.”
-- Ajout d'une barrière dans le moteur pour empêcher les phrases artificielles de réapparaître.
-- Ajout de quelques phrases validées manuellement pour remplacer les anciennes.
-
-## Bilan
-- Textes corrigés : 51
-- Exemples supprimés : 18
+## Bilan nettoyage
+- Textes corrigés : 0
+- Exemples supprimés : 0
 - Cartes supprimées : 0
 - Fiches restantes : 835
 
-## Important
-Cette version ne rajoute pas de nouvelles fonctionnalités. Elle nettoie la base existante.
+## Déployer
+```bash
+npm run build
+```
+Puis commit + push.

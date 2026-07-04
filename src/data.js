@@ -27226,7 +27226,7 @@ function makeFill(card, direction) {
       }));
     }
   }
-  return out;
+  return out.filter(naturalExerciseGuard);
 }
 
 function makeConjugation(card) {
@@ -27496,40 +27496,32 @@ export const QUALITY_REPORT = {
 
 export const LESSONS = [
   {
-    "id": "a1_ch1_alphabet",
+    "id": "a1_ch1_letter_pronunciation",
     "chapterId": "a1_ch1",
     "level": "A1",
     "order": 1,
-    "title": "L'alphabet",
-    "duration": "4 min",
+    "title": "Prononciation des lettres",
+    "duration": "6 min",
     "targetExercises": 15,
-    "objective": "Savoir reconnaître les 26 lettres et épeler un mot simple.",
+    "objective": "Savoir prononcer les lettres anglaises et comprendre leur écriture IPA.",
     "sections": [
       {
         "title": "À quoi ça sert ?",
-        "body": "L'alphabet sert à épeler un prénom, une adresse email, un pseudo ou un mot que quelqu'un ne comprend pas."
+        "body": "Les lettres sont les mêmes qu'en français, mais leur prononciation change. C'est utile pour épeler un prénom, un pseudo, une adresse e-mail ou comprendre quelqu'un au téléphone."
+      },
+      {
+        "title": "Comment utiliser cette leçon ?",
+        "body": "Regarde la lettre, écoute le son, puis lis la transcription IPA à côté. L'IPA montre la prononciation exacte."
       },
       {
         "title": "À retenir",
-        "body": "L'anglais utilise les mêmes 26 lettres que le français, mais certaines se prononcent autrement : A, E, G, I, J, R, U, W, Y."
-      },
-      {
-        "title": "Exemples",
-        "body": "Can you spell your name? → Peux-tu épeler ton nom ?\nMy name is Jeremy. J-E-R-E-M-Y."
-      },
-      {
-        "title": "Astuce",
-        "body": "Commence par apprendre à épeler ton prénom, ton email et ton pseudo. C'est ce que tu utiliseras le plus."
-      },
-      {
-        "title": "Erreur fréquente",
-        "body": "Ne prononce pas toutes les lettres comme en français. Le E anglais ressemble souvent au son 'i'."
+        "body": "Certaines lettres trompent souvent les francophones : A se prononce /eɪ/, E se prononce /iː/, I se prononce /aɪ/, et W se prononce /ˈdʌbəl.juː/."
       }
     ],
     "summary": [
-      "L'alphabet anglais a 26 lettres.",
-      "Certaines lettres ne se prononcent pas comme en français.",
-      "Épeler est utile au téléphone, en voyage et pour les formulaires."
+      "Le bouton Écouter prononce la lettre en anglais.",
+      "L'IPA indique la prononciation exacte.",
+      "Cette leçon sert surtout à épeler correctement."
     ],
     "train": {
       "type": "mix",
@@ -27538,7 +27530,139 @@ export const LESSONS = [
       ],
       "direction": "mix",
       "difficulty": "all"
-    }
+    },
+    "letterSounds": [
+      {
+        "letter": "A",
+        "ipa": "/eɪ/",
+        "speech": "ay"
+      },
+      {
+        "letter": "B",
+        "ipa": "/biː/",
+        "speech": "bee"
+      },
+      {
+        "letter": "C",
+        "ipa": "/siː/",
+        "speech": "see"
+      },
+      {
+        "letter": "D",
+        "ipa": "/diː/",
+        "speech": "dee"
+      },
+      {
+        "letter": "E",
+        "ipa": "/iː/",
+        "speech": "ee"
+      },
+      {
+        "letter": "F",
+        "ipa": "/ɛf/",
+        "speech": "eff"
+      },
+      {
+        "letter": "G",
+        "ipa": "/dʒiː/",
+        "speech": "gee"
+      },
+      {
+        "letter": "H",
+        "ipa": "/eɪtʃ/",
+        "speech": "aitch"
+      },
+      {
+        "letter": "I",
+        "ipa": "/aɪ/",
+        "speech": "eye"
+      },
+      {
+        "letter": "J",
+        "ipa": "/dʒeɪ/",
+        "speech": "jay"
+      },
+      {
+        "letter": "K",
+        "ipa": "/keɪ/",
+        "speech": "kay"
+      },
+      {
+        "letter": "L",
+        "ipa": "/ɛl/",
+        "speech": "el"
+      },
+      {
+        "letter": "M",
+        "ipa": "/ɛm/",
+        "speech": "em"
+      },
+      {
+        "letter": "N",
+        "ipa": "/ɛn/",
+        "speech": "en"
+      },
+      {
+        "letter": "O",
+        "ipa": "/oʊ/",
+        "speech": "oh"
+      },
+      {
+        "letter": "P",
+        "ipa": "/piː/",
+        "speech": "pee"
+      },
+      {
+        "letter": "Q",
+        "ipa": "/kjuː/",
+        "speech": "cue"
+      },
+      {
+        "letter": "R",
+        "ipa": "/ɑːr/",
+        "speech": "are"
+      },
+      {
+        "letter": "S",
+        "ipa": "/ɛs/",
+        "speech": "ess"
+      },
+      {
+        "letter": "T",
+        "ipa": "/tiː/",
+        "speech": "tee"
+      },
+      {
+        "letter": "U",
+        "ipa": "/juː/",
+        "speech": "you"
+      },
+      {
+        "letter": "V",
+        "ipa": "/viː/",
+        "speech": "vee"
+      },
+      {
+        "letter": "W",
+        "ipa": "/ˈdʌbəl.juː/",
+        "speech": "double you"
+      },
+      {
+        "letter": "X",
+        "ipa": "/ɛks/",
+        "speech": "ex"
+      },
+      {
+        "letter": "Y",
+        "ipa": "/waɪ/",
+        "speech": "why"
+      },
+      {
+        "letter": "Z",
+        "ipa": "/ziː/",
+        "speech": "zee"
+      }
+    ]
   },
   {
     "id": "a1_ch1_pronouns",

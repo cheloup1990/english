@@ -5,7 +5,7 @@ import { Home, PenLine, BookOpen, User } from "lucide-react";
 import { CARDS, THEMES, generateExercises, QUALITY_REPORT, normalize, LESSONS, CHAPTERS } from "./data";
 import "./styles.css";
 
-const KEY = "better-english-v10-5";
+const KEY = "better-english-v10-5a";
 
 const defaultState = {
   name: "Jeremy",
@@ -493,8 +493,8 @@ function App() {
         <section className="screen active">
           <div className="hero-card">
             <div className="hero-inner">
-              <div className="hero-label">V10.5.5.4.3a</div>
-              <h2 className="hero-title">Base nettoyée</h2>
+              <div className="hero-label">V10.5a.5a.5.4.3a</div>
+              <h2 className="hero-title">Prononciation + base propre</h2>
               <p className="hero-sub">Better English apprend l’anglais qu’on rencontre dans la vraie vie, pas l’anglais des manuels scolaires.</p>
               <div className="progress"><span style={{ width: `${state.xp % 100}%` }} /></div>
               <button className="btn full" onClick={() => setTab("exercise")}>Continuer</button>
@@ -702,6 +702,35 @@ function Filter({ title, label, id, open, setOpen, children }) {
 
 
 
+
+function speakEnglish(text) {
+  try {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US";
+    utterance.rate = 0.75;
+    window.speechSynthesis.speak(utterance);
+  } catch (e) {
+    console.warn("Speech synthesis unavailable", e);
+  }
+}
+
+function LetterSoundGrid({ letters }) {
+  if (!letters?.length) return null;
+  return (
+    <div className="letter-sound-grid">
+      {letters.map((item) => (
+        <div className="letter-sound-card" key={item.letter}>
+          <strong>{item.letter}</strong>
+          <code>{item.ipa}</code>
+          <button onClick={() => speakEnglish(item.speech || item.letter)}>Écouter</button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function ChapterBlock({ chapter, lessons, completed, tests, onTrain, onComplete, onTest }) {
   const [openChapter, setOpenChapter] = React.useState(chapter.unlocked);
   const [openLesson, setOpenLesson] = React.useState(null);
@@ -745,6 +774,7 @@ function ChapterBlock({ chapter, lessons, completed, tests, onTrain, onComplete,
                       <p>{section.body}</p>
                     </div>
                   ))}
+                  {lesson.letterSounds && <LetterSoundGrid letters={lesson.letterSounds} />}
                   <div className="lesson-summary">
                     <h3>Résumé</h3>
                     {lesson.summary.map((item, index) => <p key={index}>✓ {item}</p>)}
