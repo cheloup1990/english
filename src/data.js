@@ -27534,8 +27534,8 @@ export const LESSONS = [
     "letterSounds": [
       {
         "letter": "A",
-        "speech": "AI",
-        "audioText": "AI"
+        "speech": "ay",
+        "audioText": "ay"
       },
       {
         "letter": "B",
@@ -27659,8 +27659,8 @@ export const LESSONS = [
       },
       {
         "letter": "Z",
-        "speech": "ZEE",
-        "audioText": "ZEE"
+        "speech": "zee",
+        "audioText": "zee"
       }
     ],
     "interactiveType": "letter_pronunciation"

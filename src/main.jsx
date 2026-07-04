@@ -5,7 +5,7 @@ import { Home, PenLine, BookOpen, User } from "lucide-react";
 import { CARDS, THEMES, generateExercises, QUALITY_REPORT, normalize, LESSONS, CHAPTERS } from "./data";
 import "./styles.css";
 
-const KEY = "better-english-v10-5h";
+const KEY = "better-english-v10-5j";
 
 const defaultState = {
   name: "Jeremy",
@@ -497,8 +497,8 @@ function App() {
         <section className="screen active">
           <div className="hero-card">
             <div className="hero-inner">
-              <div className="hero-label">V10.5HHGdc.5a.5.4.3a</div>
-              <h2 className="hero-title">V10.5HH</h2>
+              <div className="hero-label">V10.5JHGdc.5a.5.4.3a</div>
+              <h2 className="hero-title">V10.5JH</h2>
               <p className="hero-sub">Better English apprend l’anglais qu’on rencontre dans la vraie vie, pas l’anglais des manuels scolaires.</p>
               <div className="progress"><span style={{ width: `${state.xp % 100}%` }} /></div>
               <button className="btn full" onClick={() => setTab("exercise")}>Continuer</button>
@@ -710,11 +710,34 @@ function Filter({ title, label, id, open, setOpen, children }) {
 function speakEnglish(text) {
   try {
     if (!("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
-    utterance.rate = 0.72;
-    window.speechSynthesis.speak(utterance);
+
+    const speakNow = () => {
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(String(text || ""));
+      utterance.lang = "en-US";
+      utterance.rate = 0.72;
+      utterance.pitch = 1;
+
+      const voices = window.speechSynthesis.getVoices?.() || [];
+      const englishVoice =
+        voices.find(v => v.lang === "en-US") ||
+        voices.find(v => v.lang === "en-GB") ||
+        voices.find(v => String(v.lang || "").toLowerCase().startsWith("en")) ||
+        null;
+
+      if (englishVoice) utterance.voice = englishVoice;
+
+      window.speechSynthesis.speak(utterance);
+    };
+
+    const voices = window.speechSynthesis.getVoices?.() || [];
+    if (voices.length === 0 && "onvoiceschanged" in window.speechSynthesis) {
+      window.speechSynthesis.onvoiceschanged = speakNow;
+      setTimeout(speakNow, 250);
+    } else {
+      speakNow();
+    }
   } catch (e) {
     console.warn("Speech synthesis unavailable", e);
   }
@@ -730,8 +753,35 @@ function shuffleArray(list) {
 }
 
 function makeLetterOptions(correct, letters) {
-  const others = letters.filter((l) => l.letter !== correct.letter);
-  return shuffleArray([correct, ...shuffleArray(others).slice(0, 3)]).map((l) => l.letter);
+  const confusionGroups = [
+    ["C", "Z"],
+    ["M", "N"],
+    ["B", "D", "P"],
+    ["E", "I"],
+    ["A", "J"]
+  ];
+
+  function conflict(a, b) {
+    if (a === b) return true;
+    return confusionGroups.some(group => group.includes(a) && group.includes(b));
+  }
+
+  const options = [correct.letter];
+  const shuffled = shuffleArray(letters);
+
+  for (const item of shuffled) {
+    if (options.length >= 4) break;
+    if (options.some(existing => conflict(existing, item.letter))) continue;
+    options.push(item.letter);
+  }
+
+  // Fallback, normally unused, in case a future alphabet list is too small.
+  for (const item of shuffled) {
+    if (options.length >= 4) break;
+    if (!options.includes(item.letter)) options.push(item.letter);
+  }
+
+  return shuffleArray(options);
 }
 
 function ChapterBlock({ chapter, lessons, completed, tests, onGoExercise, onCompleteLesson, onUndoLesson, onTest }) {

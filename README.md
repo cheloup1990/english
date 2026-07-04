@@ -1,15 +1,17 @@
-# Better English V10.5H
+# Better English V10.5J
 
-Passe de finition visuelle.
+Correctif quiz des lettres.
 
-## Modifications
-- Suppression du bouton inutile "Aller aux exercices".
-- Typographie des leçons uniformisée.
-- Violet réservé aux titres importants, badges, boutons et sélection.
-- Sous-titres de contenu en gris/noir pour une lecture plus propre.
-- Cartes de leçons avec bordure violette plus cohérente.
-- Sélection du quiz : contour violet uniquement, pas de gros fond violet.
-- Les thèmes de S'entraîner se ferment quand on arrive sur l'onglet.
+## Corrigé
+Le quiz évite maintenant les lettres trop proches dans les mêmes propositions.
 
-## Base
-Basée sur V10.5G.
+Groupes exclus ensemble :
+- C / Z
+- M / N
+- B / D / P
+- E / I
+- A / J
+
+Exemple :
+Si la bonne réponse est Z, C ne peut pas apparaître dans les choix.
+Si M apparaît, N ne peut pas apparaître dans les choix.
