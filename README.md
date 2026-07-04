@@ -1,12 +1,31 @@
-# Better English V10.5f
+# Better English V10.5G
 
-Correctifs leçon Prononciation.
+Version de finition des leçons.
 
-## Corrigé
-- Le bouton S'entraîner / les onglets quittent bien la page de leçon.
-- Ajout d'un bouton Aller aux exercices depuis la leçon.
-- Le bouton Terminer la leçon devient Annuler la validation si la leçon est déjà terminée.
-- Annuler la validation retire la leçon du pourcentage de progression.
-- Message d'erreur du quiz lettres remplacé par :
-  Raté. La bonne réponse était X.
-- Z utilise un texte audio forcé "ze" pour mieux faire entendre le son Z.
+## Inclus
+- Leçons en accordéon : clic pour ouvrir, clic pour replier.
+- Plus de page de leçon séparée.
+- Plus de bouton Retour.
+- Cartes de leçons avec bordure violette plus marquée.
+- Leçon Prononciation :
+  - 26 lettres ;
+  - bouton Écouter ;
+  - A utilise audio caché AI ;
+  - Z utilise audio caché ZEE ;
+  - pas d'IPA affichée.
+- Quiz des lettres :
+  - sélection avec contour violet uniquement ;
+  - bouton Valider obligatoire ;
+  - bouton Réécouter ;
+  - message : Raté. La bonne réponse était X.
+  - 26 lettres sans répétition par cycle ;
+  - nouveau mélange à chaque cycle.
+- Terminer la leçon devient Annuler la validation.
+- Aller aux exercices ferme la leçon et ouvre S'entraîner.
+- En entrant dans S'entraîner, les thèmes sont fermés par défaut.
+
+## Déployer
+```bash
+npm run build
+```
+Puis commit + push.

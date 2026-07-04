@@ -5,7 +5,7 @@ import { Home, PenLine, BookOpen, User } from "lucide-react";
 import { CARDS, THEMES, generateExercises, QUALITY_REPORT, normalize, LESSONS, CHAPTERS } from "./data";
 import "./styles.css";
 
-const KEY = "better-english-v10-5f";
+const KEY = "better-english-v10-5g";
 
 const defaultState = {
   name: "Jeremy",
@@ -217,7 +217,6 @@ function App() {
   const [selected, setSelected] = useState("");
   const [feedback, setFeedback] = useState(null);
   const [chapterTest, setChapterTest] = useState(null);
-  const [activeLesson, setActiveLesson] = useState(null);
   const [filterOpen, setFilterOpen] = useState("theme");
   const [nameInput, setNameInput] = useState(state.name);
   const [navHidden, setNavHidden] = useState(false);
@@ -346,6 +345,10 @@ function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  useEffect(() => {
+    if (tab === "exercise") setFilterOpen(null);
+  }, [tab]);
+
   function answerChapterTest(option) {
     setChapterTest((test) => test ? { ...test, selected: option } : test);
   }
@@ -473,19 +476,7 @@ function App() {
       </header>
 
       <div className={`top-tabs ${navHidden ? "hide" : ""}`}>
-        {nav.map(([id,label]) => (
-          <button
-            key={id}
-            className={tab===id ? "active" : ""}
-            onClick={() => {
-              setActiveLesson(null);
-              setChapterTest(null);
-              setTab(id);
-            }}
-          >
-            {label}
-          </button>
-        ))}
+        {nav.map(([id,label]) => <button key={id} className={tab===id ? "active" : ""} onClick={() => setTab(id)}>{label}</button>)}
       </div>
 
       {chapterTest && (
@@ -500,42 +491,14 @@ function App() {
         </section>
       )}
 
-      {activeLesson && (
-        <section className="screen active">
-          <LessonPlayer
-            lesson={activeLesson}
-            onBack={() => setActiveLesson(null)}
-            done={!!state.completedLessons?.[activeLesson.id]}
-            onGoExercise={() => {
-              setActiveLesson(null);
-              setTab("exercise");
-            }}
-            onComplete={() => {
-              setState((s) => ({
-                ...s,
-                completedLessons: { ...(s.completedLessons || {}), [activeLesson.id]: true },
-                xp: s.xp + 30,
-              }));
-            }}
-            onUndoComplete={() => {
-              setState((s) => {
-                const nextCompleted = { ...(s.completedLessons || {}) };
-                delete nextCompleted[activeLesson.id];
-                return { ...s, completedLessons: nextCompleted };
-              });
-            }}
-          />
-        </section>
-      )}
-
-      {!chapterTest && !activeLesson && <>
+      {!chapterTest && <>
 
       {tab === "home" && (
         <section className="screen active">
           <div className="hero-card">
             <div className="hero-inner">
-              <div className="hero-label">V10.5fdc.5a.5.4.3a</div>
-              <h2 className="hero-title">Leçons interactives</h2>
+              <div className="hero-label">V10.5GGdc.5a.5.4.3a</div>
+              <h2 className="hero-title">V10.5G</h2>
               <p className="hero-sub">Better English apprend l’anglais qu’on rencontre dans la vraie vie, pas l’anglais des manuels scolaires.</p>
               <div className="progress"><span style={{ width: `${state.xp % 100}%` }} /></div>
               <button className="btn full" onClick={() => setTab("exercise")}>Continuer</button>
@@ -681,7 +644,23 @@ function App() {
               lessons={LESSONS.filter((l) => l.chapterId === chapter.id)}
               completed={state.completedLessons || {}}
               tests={state.chapterTests || {}}
-              onOpenLesson={(lesson) => setActiveLesson(lesson)}
+              onGoExercise={() => {
+                setTab("exercise");
+              }}
+              onCompleteLesson={(lesson) => {
+                setState((s) => ({
+                  ...s,
+                  completedLessons: { ...(s.completedLessons || {}), [lesson.id]: true },
+                  xp: s.xp + 30,
+                }));
+              }}
+              onUndoLesson={(lesson) => {
+                setState((s) => {
+                  const nextCompleted = { ...(s.completedLessons || {}) };
+                  delete nextCompleted[lesson.id];
+                  return { ...s, completedLessons: nextCompleted };
+                });
+              }}
               onTest={startChapterTest}
             />
           ))}
@@ -727,13 +706,14 @@ function Filter({ title, label, id, open, setOpen, children }) {
 
 
 
+
 function speakEnglish(text) {
   try {
     if (!("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "en-US";
-    utterance.rate = 0.75;
+    utterance.rate = 0.72;
     window.speechSynthesis.speak(utterance);
   } catch (e) {
     console.warn("Speech synthesis unavailable", e);
@@ -754,8 +734,9 @@ function makeLetterOptions(correct, letters) {
   return shuffleArray([correct, ...shuffleArray(others).slice(0, 3)]).map((l) => l.letter);
 }
 
-function ChapterBlock({ chapter, lessons, completed, tests, onOpenLesson, onTest }) {
+function ChapterBlock({ chapter, lessons, completed, tests, onGoExercise, onCompleteLesson, onUndoLesson, onTest }) {
   const [openChapter, setOpenChapter] = React.useState(Boolean(chapter.unlocked));
+  const [openLesson, setOpenLesson] = React.useState(null);
   const doneCount = lessons.filter((l) => completed[l.id]).length;
   const pct = lessons.length ? Math.round((doneCount / lessons.length) * 100) : 0;
   const locked = !chapter.unlocked;
@@ -777,18 +758,33 @@ function ChapterBlock({ chapter, lessons, completed, tests, onOpenLesson, onTest
           <div className="progress"><span style={{ width: `${pct}%` }} /></div>
           <p className="muted">{doneCount}/{lessons.length} leçons terminées</p>
 
-          {lessons.map((lesson) => (
-            <div className={`lesson-row ${completed[lesson.id] ? "done" : ""}`} key={lesson.id}>
-              <button type="button" className="lesson-row-head" onClick={() => onOpenLesson(lesson)}>
-                <div>
-                  <small>{lesson.level} · {lesson.duration}</small>
-                  <b>{lesson.order}. {lesson.title}</b>
-                  <span>{lesson.objective}</span>
-                </div>
-                <em>{completed[lesson.id] ? "Revoir" : "Ouvrir"}</em>
-              </button>
-            </div>
-          ))}
+          {lessons.map((lesson) => {
+            const opened = openLesson === lesson.id;
+            const done = !!completed[lesson.id];
+
+            return (
+              <div className={`lesson-accordion ${opened ? "open" : ""} ${done ? "done" : ""}`} key={lesson.id}>
+                <button type="button" className="lesson-accordion-head" onClick={() => setOpenLesson(opened ? null : lesson.id)}>
+                  <div>
+                    <small>{lesson.level} · {lesson.duration}</small>
+                    <b>{lesson.order}. {lesson.title}</b>
+                    <span>{lesson.objective}</span>
+                  </div>
+                  <em>{opened ? "Replier" : done ? "Revoir" : "Ouvrir"}</em>
+                </button>
+
+                {opened && (
+                  <LessonAccordionContent
+                    lesson={lesson}
+                    done={done}
+                    onGoExercise={onGoExercise}
+                    onComplete={() => onCompleteLesson(lesson)}
+                    onUndo={() => onUndoLesson(lesson)}
+                  />
+                )}
+              </div>
+            );
+          })}
 
           <div className="chapter-test">
             <div className="section-title"><h3>Test du chapitre</h3><span className="tag">40 questions</span></div>
@@ -801,19 +797,11 @@ function ChapterBlock({ chapter, lessons, completed, tests, onOpenLesson, onTest
   );
 }
 
-function LessonPlayer({ lesson, onBack, onComplete, onUndoComplete, onGoExercise, done }) {
+function LessonAccordionContent({ lesson, done, onGoExercise, onComplete, onUndo }) {
   const isLetterLesson = lesson.interactiveType === "letter_pronunciation" || lesson.letterSounds?.length;
 
   return (
-    <div className="lesson-player card">
-      <div className="lesson-player-head">
-        <button type="button" className="back-btn" onClick={onBack}>Retour</button>
-        <span className="tag">{lesson.level} · {lesson.duration}</span>
-      </div>
-
-      <h2>{lesson.title}</h2>
-      <p className="muted">{lesson.objective}</p>
-
+    <div className="lesson-accordion-body">
       {(lesson.sections || []).map((section, index) => (
         <div className="lesson-section" key={index}>
           <h3>{section.title}</h3>
@@ -821,14 +809,7 @@ function LessonPlayer({ lesson, onBack, onComplete, onUndoComplete, onGoExercise
         </div>
       ))}
 
-      {isLetterLesson ? (
-        <LetterPronunciationLesson letters={lesson.letterSounds || []} />
-      ) : (
-        <div className="lesson-summary">
-          <h3>Exercices de leçon</h3>
-          <p>Les mini-exercices intégrés seront ajoutés sur cette leçon après validation du modèle.</p>
-        </div>
-      )}
+      {isLetterLesson && <LetterPronunciationLesson letters={lesson.letterSounds || []} />}
 
       <div className="lesson-summary">
         <h3>Résumé</h3>
@@ -837,7 +818,7 @@ function LessonPlayer({ lesson, onBack, onComplete, onUndoComplete, onGoExercise
 
       <div className="row lesson-actions">
         <button type="button" className="btn" onClick={onGoExercise}>Aller aux exercices</button>
-        <button type="button" className="btn secondary" onClick={done ? onUndoComplete : onComplete}>
+        <button type="button" className="btn secondary" onClick={done ? onUndo : onComplete}>
           {done ? "Annuler la validation" : "Terminer la leçon"}
         </button>
       </div>
@@ -857,19 +838,24 @@ function LetterPronunciationLesson({ letters }) {
       current,
       options: makeLetterOptions(current, letters),
       selected: "",
+      checked: false,
       feedback: "",
       completedCycles: 0
     });
     setTimeout(() => speakEnglish(current.audioText || current.speech || current.letter), 150);
   }
 
-  function choose(letter) {
+  function selectOption(letter) {
+    setQuiz((q) => q && !q.checked ? { ...q, selected: letter } : q);
+  }
+
+  function validateAnswer() {
     setQuiz((q) => {
-      if (!q) return q;
-      const good = letter === q.current.letter;
+      if (!q || !q.selected) return q;
+      const good = q.selected === q.current.letter;
       return {
         ...q,
-        selected: letter,
+        checked: true,
         feedback: good ? "Correct." : `Raté. La bonne réponse était ${q.current.letter}.`
       };
     });
@@ -877,7 +863,7 @@ function LetterPronunciationLesson({ letters }) {
 
   function nextQuestion() {
     setQuiz((q) => {
-      if (!q || !q.selected) return q;
+      if (!q || !q.checked) return q;
       const nextIndex = q.index + 1;
 
       if (nextIndex >= q.cycle.length) {
@@ -890,6 +876,7 @@ function LetterPronunciationLesson({ letters }) {
           current,
           options: makeLetterOptions(current, letters),
           selected: "",
+          checked: false,
           feedback: "Cycle terminé. Nouveau mélange lancé.",
           completedCycles: q.completedCycles + 1
         };
@@ -903,6 +890,7 @@ function LetterPronunciationLesson({ letters }) {
         current,
         options: makeLetterOptions(current, letters),
         selected: "",
+        checked: false,
         feedback: ""
       };
     });
@@ -936,28 +924,32 @@ function LetterPronunciationLesson({ letters }) {
             <button type="button" className="btn full replay-btn" onClick={() => speakEnglish(quiz.current.audioText || quiz.current.speech || quiz.current.letter)}>Réécouter</button>
 
             <div className="letter-options">
-              {quiz.options.map((option) => (
-                <button
-                  type="button"
-                  key={option}
-                  className={`letter-option ${quiz.selected === option ? (option === quiz.current.letter ? "good" : "bad") : ""}`}
-                  onClick={() => choose(option)}
-                >
-                  {option}
-                </button>
-              ))}
+              {quiz.options.map((option) => {
+                const selected = quiz.selected === option;
+                const isGood = quiz.checked && option === quiz.current.letter;
+                const isBad = quiz.checked && selected && option !== quiz.current.letter;
+                return (
+                  <button
+                    type="button"
+                    key={option}
+                    className={`letter-option ${selected ? "selected" : ""} ${isGood ? "good" : ""} ${isBad ? "bad" : ""}`}
+                    onClick={() => selectOption(option)}
+                  >
+                    {option}
+                  </button>
+                );
+              })}
             </div>
 
-            {quiz.feedback && <p className={`letter-feedback ${quiz.feedback === "Correct." ? "good" : "bad"}`}>{quiz.feedback}</p>}
+            {quiz.feedback && <p className={`letter-feedback ${quiz.feedback === "Correct." ? "good" : quiz.feedback.startsWith("Raté") ? "bad" : "soft"}`}>{quiz.feedback}</p>}
 
-            <button
-              type="button"
-              className="btn full"
-              onClick={nextQuestion}
-              disabled={!quiz.selected}
-            >
-              {quiz.index + 1 >= quiz.cycle.length ? "Nouveau cycle" : "Lettre suivante"}
-            </button>
+            {!quiz.checked ? (
+              <button type="button" className="btn full" onClick={validateAnswer} disabled={!quiz.selected}>Valider</button>
+            ) : (
+              <button type="button" className="btn full" onClick={nextQuestion}>
+                {quiz.index + 1 >= quiz.cycle.length ? "Nouveau cycle" : "Lettre suivante"}
+              </button>
+            )}
 
             <p className="muted cycle-note">Cycles terminés : {quiz.completedCycles}</p>
           </>

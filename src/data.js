@@ -27510,18 +27510,18 @@ export const LESSONS = [
         "body": "Les lettres sont les mêmes qu'en français, mais leur prononciation change. C'est utile pour épeler un prénom, un pseudo, une adresse e-mail ou comprendre quelqu'un au téléphone."
       },
       {
-        "title": "Comment utiliser cette leçon ?",
-        "body": "Écoute les lettres une par une, puis lance le quiz. Dans le quiz, chaque lettre passe une seule fois par cycle."
+        "title": "Comment faire ?",
+        "body": "Écoute les lettres une par une. Quand tu es prêt, lance le quiz d'écoute directement dans la leçon."
       },
       {
         "title": "Règle du quiz",
-        "body": "Les 26 lettres sont mélangées. Une lettre réussie disparaît du cycle. Quand les 26 sont terminées, un nouveau cycle recommence dans un nouvel ordre."
+        "body": "Les 26 lettres passent une seule fois par cycle. Quand les 26 sont terminées, le cycle recommence dans un nouvel ordre aléatoire."
       }
     ],
     "summary": [
-      "Le bouton Écouter prononce la lettre en anglais.",
-      "Le quiz fait passer les 26 lettres sans répétition.",
-      "Tu peux réécouter autant de fois que tu veux."
+      "Chaque lettre possède un bouton Écouter.",
+      "Le quiz ne répète pas une lettre avant la fin du cycle.",
+      "Le bouton Réécouter est disponible autant de fois que nécessaire."
     ],
     "train": {
       "type": "mix",
@@ -27534,108 +27534,133 @@ export const LESSONS = [
     "letterSounds": [
       {
         "letter": "A",
-        "speech": "ay"
+        "speech": "AI",
+        "audioText": "AI"
       },
       {
         "letter": "B",
-        "speech": "bee"
+        "speech": "bee",
+        "audioText": "bee"
       },
       {
         "letter": "C",
-        "speech": "see"
+        "speech": "see",
+        "audioText": "see"
       },
       {
         "letter": "D",
-        "speech": "dee"
+        "speech": "dee",
+        "audioText": "dee"
       },
       {
         "letter": "E",
-        "speech": "ee"
+        "speech": "ee",
+        "audioText": "ee"
       },
       {
         "letter": "F",
-        "speech": "eff"
+        "speech": "eff",
+        "audioText": "eff"
       },
       {
         "letter": "G",
-        "speech": "gee"
+        "speech": "gee",
+        "audioText": "gee"
       },
       {
         "letter": "H",
-        "speech": "aitch"
+        "speech": "aitch",
+        "audioText": "aitch"
       },
       {
         "letter": "I",
-        "speech": "eye"
+        "speech": "eye",
+        "audioText": "eye"
       },
       {
         "letter": "J",
-        "speech": "jay"
+        "speech": "jay",
+        "audioText": "jay"
       },
       {
         "letter": "K",
-        "speech": "kay"
+        "speech": "kay",
+        "audioText": "kay"
       },
       {
         "letter": "L",
-        "speech": "el"
+        "speech": "ell",
+        "audioText": "ell"
       },
       {
         "letter": "M",
-        "speech": "em"
+        "speech": "em",
+        "audioText": "em"
       },
       {
         "letter": "N",
-        "speech": "en"
+        "speech": "en",
+        "audioText": "en"
       },
       {
         "letter": "O",
-        "speech": "oh"
+        "speech": "oh",
+        "audioText": "oh"
       },
       {
         "letter": "P",
-        "speech": "pee"
+        "speech": "pee",
+        "audioText": "pee"
       },
       {
         "letter": "Q",
-        "speech": "cue"
+        "speech": "cue",
+        "audioText": "cue"
       },
       {
         "letter": "R",
-        "speech": "are"
+        "speech": "are",
+        "audioText": "are"
       },
       {
         "letter": "S",
-        "speech": "ess"
+        "speech": "ess",
+        "audioText": "ess"
       },
       {
         "letter": "T",
-        "speech": "tee"
+        "speech": "tee",
+        "audioText": "tee"
       },
       {
         "letter": "U",
-        "speech": "you"
+        "speech": "you",
+        "audioText": "you"
       },
       {
         "letter": "V",
-        "speech": "vee"
+        "speech": "vee",
+        "audioText": "vee"
       },
       {
         "letter": "W",
-        "speech": "double you"
+        "speech": "double you",
+        "audioText": "double you"
       },
       {
         "letter": "X",
-        "speech": "ex"
+        "speech": "ex",
+        "audioText": "ex"
       },
       {
         "letter": "Y",
-        "speech": "why"
+        "speech": "why",
+        "audioText": "why"
       },
       {
         "letter": "Z",
-        "speech": "ze",
-        "audioText": "ze"
+        "speech": "ZEE",
+        "audioText": "ZEE"
       }
     ],
     "interactiveType": "letter_pronunciation"
