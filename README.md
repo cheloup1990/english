@@ -1,30 +1,29 @@
-# Better English V10.4 — Smart Correction
+# Better English V10.5 — Base nettoyée
 
-Version basée sur V10.3b.
+Version centrée uniquement sur la correction de la base.
 
-## Ajouts
-- Nouveau moteur de correction avec score.
-- Résultats : Excellent, Très bien, Presque, À revoir.
-- Majuscules ignorées.
-- Ponctuation finale ignorée.
-- Espaces en trop ignorés.
-- Apostrophes normalisées.
-- Nombres acceptés : 100 = cent, cents = cent, 1 = un / une.
-- Détection de petites erreurs :
-  - accord singulier/pluriel
-  - mots manquants
-  - traduction incomplète
-- Consignes claires :
-  - Traduis la phrase entière en français.
-  - Traduis la phrase entière en anglais.
-  - Traduis ce mot ou cette expression.
-  - Écris la forme demandée du verbe.
-- Nettoyage des phrases parasites : Tu peux dire, On dit, En anglais, Exemple.
+## Objectif
+Supprimer les erreurs classiques et les phrases générées artificiellement.
 
-Occurrences nettoyées dans la base : 30
+## Corrections
+- Suppression/correction des phrases parasites :
+  - Tu peux dire :
+  - You can say:
+  - On dit :
+  - En anglais :
+  - People often write ...
+- Correction des phrases non naturelles :
+  - J'ai nez qui coule → J'ai le nez qui coule.
+  - People often write no worries online → No worries!
+  - People often write NGL online → NGL means “not gonna lie.”
+- Ajout d'une barrière dans le moteur pour empêcher les phrases artificielles de réapparaître.
+- Ajout de quelques phrases validées manuellement pour remplacer les anciennes.
 
-## Déployer
-```bash
-npm run build
-```
-Puis commit + push.
+## Bilan
+- Textes corrigés : 51
+- Exemples supprimés : 18
+- Cartes supprimées : 0
+- Fiches restantes : 835
+
+## Important
+Cette version ne rajoute pas de nouvelles fonctionnalités. Elle nettoie la base existante.

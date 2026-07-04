@@ -2795,18 +2795,20 @@ export const CARDS = [
     "id": "tbh",
     "kind": "word",
     "theme": "Anglais moderne",
-    "category": "expression",
-    "group": "anglais_moderne_abréviations",
-    "fr": "honnêtement",
+    "category": "slang",
+    "group": "slang_common",
+    "fr": "pour être honnête",
     "en": "TBH",
     "difficulty": "easy",
-    "priority": 70,
-    "accepted": [],
+    "priority": 90,
+    "accepted": [
+      "pour être honnête",
+      "franchement"
+    ],
     "examples": [
       {
-        "en": "TBH, I don't know.",
-        "fr": "Honnêtement, je ne sais pas.",
-        "tense": null
+        "en": "TBH, I agree.",
+        "fr": "Pour être honnête, je suis d'accord."
       }
     ],
     "notes": "",
@@ -2824,24 +2826,31 @@ export const CARDS = [
     "correctAnswer": "TBH",
     "validationStatus": "validated",
     "frequency": "common",
-    "source": "better_english_v10"
+    "source": "better_english_v10",
+    "qualityScore": 100
   },
   {
     "id": "idk",
     "kind": "word",
     "theme": "Anglais moderne",
-    "category": "expression",
-    "group": "anglais_moderne_abréviations",
+    "category": "slang",
+    "group": "slang_common",
     "fr": "je ne sais pas",
     "en": "IDK",
     "difficulty": "easy",
-    "priority": 70,
-    "accepted": [],
+    "priority": 90,
+    "accepted": [
+      "je ne sais pas",
+      "j'en sais rien"
+    ],
     "examples": [
       {
-        "en": "IDK what happened.",
-        "fr": "Je ne sais pas ce qui s'est passé.",
-        "tense": null
+        "en": "IDK.",
+        "fr": "Je ne sais pas."
+      },
+      {
+        "en": "IDK what to do.",
+        "fr": "Je ne sais pas quoi faire."
       }
     ],
     "notes": "",
@@ -2859,7 +2868,8 @@ export const CARDS = [
     "correctAnswer": "IDK",
     "validationStatus": "validated",
     "frequency": "common",
-    "source": "better_english_v10"
+    "source": "better_english_v10",
+    "qualityScore": 100
   },
   {
     "id": "dog",
@@ -11971,7 +11981,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: Nice to meet you.",
+        "en": "Nice to meet you.",
         "fr": "Enchanté.",
         "tense": null
       }
@@ -12006,8 +12016,8 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: How are you?.",
-        "fr": "Ça va ?.",
+        "en": "How are you?",
+        "fr": "Ça va ?",
         "tense": null
       }
     ],
@@ -12041,7 +12051,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: I'm good.",
+        "en": "I'm good.",
         "fr": "Je vais bien.",
         "tense": null
       }
@@ -12076,7 +12086,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: No problem.",
+        "en": "No problem.",
         "fr": "Pas de problème.",
         "tense": null
       }
@@ -12101,19 +12111,27 @@ export const CARDS = [
   {
     "id": "conversation_phrases_utiles_no_worries",
     "kind": "phrase",
-    "theme": "Conversation",
-    "category": "phrase",
-    "group": "conversation_phrases_utiles",
-    "fr": "Pas de souci",
-    "en": "No worries",
+    "theme": "Anglais moderne",
+    "category": "expression",
+    "group": "expressions_common",
+    "fr": "Pas de souci !",
+    "en": "No worries!",
     "difficulty": "easy",
     "priority": 90,
-    "accepted": [],
+    "accepted": [
+      "pas de souci",
+      "aucun souci",
+      "t'inquiète",
+      "pas de problème"
+    ],
     "examples": [
       {
-        "en": "You can say: No worries.",
-        "fr": "Pas de souci.",
-        "tense": null
+        "en": "No worries!",
+        "fr": "Pas de souci !"
+      },
+      {
+        "en": "No worries, I can help.",
+        "fr": "Pas de souci, je peux aider."
       }
     ],
     "notes": "",
@@ -12131,7 +12149,8 @@ export const CARDS = [
     "correctAnswer": "No worries",
     "validationStatus": "validated",
     "frequency": "common",
-    "source": "better_english_v10"
+    "source": "better_english_v10",
+    "qualityScore": 100
   },
   {
     "id": "conversation_phrases_utiles_wait_a_second",
@@ -12146,7 +12165,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: Wait a second.",
+        "en": "Wait a second.",
         "fr": "Attends une seconde.",
         "tense": null
       }
@@ -12181,7 +12200,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: I'll be back.",
+        "en": "I'll be back.",
         "fr": "Je reviens.",
         "tense": null
       }
@@ -12216,7 +12235,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: I'm ready.",
+        "en": "I'm ready.",
         "fr": "Je suis prêt.",
         "tense": null
       }
@@ -12251,7 +12270,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: I'm not sure.",
+        "en": "I'm not sure.",
         "fr": "Je ne suis pas sûr.",
         "tense": null
       }
@@ -12286,7 +12305,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: I think so.",
+        "en": "I think so.",
         "fr": "Je pense que oui.",
         "tense": null
       }
@@ -12321,7 +12340,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: I don't think so.",
+        "en": "I don't think so.",
         "fr": "Je pense que non.",
         "tense": null
       }
@@ -12356,7 +12375,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: Sounds good.",
+        "en": "Sounds good.",
         "fr": "Ça a l'air bien.",
         "tense": null
       }
@@ -12391,7 +12410,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: It doesn't matter.",
+        "en": "It doesn't matter.",
         "fr": "Peu importe.",
         "tense": null
       }
@@ -12426,7 +12445,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: As you wish.",
+        "en": "As you wish.",
         "fr": "Comme tu veux.",
         "tense": null
       }
@@ -12461,7 +12480,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: I agree.",
+        "en": "I agree.",
         "fr": "Je suis d'accord.",
         "tense": null
       }
@@ -12496,7 +12515,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: I disagree.",
+        "en": "I disagree.",
         "fr": "Je ne suis pas d'accord.",
         "tense": null
       }
@@ -12531,7 +12550,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: That's a shame.",
+        "en": "That's a shame.",
         "fr": "C'est dommage.",
         "tense": null
       }
@@ -12566,7 +12585,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: That makes sense.",
+        "en": "That makes sense.",
         "fr": "C'est logique.",
         "tense": null
       }
@@ -12601,7 +12620,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: That's weird.",
+        "en": "That's weird.",
         "fr": "C'est bizarre.",
         "tense": null
       }
@@ -12636,7 +12655,7 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: That's amazing.",
+        "en": "That's amazing.",
         "fr": "C'est incroyable.",
         "tense": null
       }
@@ -12671,8 +12690,8 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: Who are you?.",
-        "fr": "Qui es-tu ?.",
+        "en": "Who are you?",
+        "fr": "Qui es-tu ?",
         "tense": null
       }
     ],
@@ -12706,8 +12725,8 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: Where are you?.",
-        "fr": "Où es-tu ?.",
+        "en": "Where are you?",
+        "fr": "Où es-tu ?",
         "tense": null
       }
     ],
@@ -12741,8 +12760,8 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: When are you arriving?.",
-        "fr": "Quand arrives-tu ?.",
+        "en": "When are you arriving?",
+        "fr": "Quand arrives-tu ?",
         "tense": null
       }
     ],
@@ -12776,8 +12795,8 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: Why?.",
-        "fr": "Pourquoi ?.",
+        "en": "Why?",
+        "fr": "Pourquoi ?",
         "tense": null
       }
     ],
@@ -12811,8 +12830,8 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: How?.",
-        "fr": "Comment ?.",
+        "en": "How?",
+        "fr": "Comment ?",
         "tense": null
       }
     ],
@@ -12846,8 +12865,8 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: How much is it?.",
-        "fr": "Combien ça coûte ?.",
+        "en": "How much is it?",
+        "fr": "Combien ça coûte ?",
         "tense": null
       }
     ],
@@ -12881,8 +12900,8 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: How old are you?.",
-        "fr": "Quel âge as-tu ?.",
+        "en": "How old are you?",
+        "fr": "Quel âge as-tu ?",
         "tense": null
       }
     ],
@@ -12916,8 +12935,8 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: Are you coming?.",
-        "fr": "Tu viens ?.",
+        "en": "Are you coming?",
+        "fr": "Tu viens ?",
         "tense": null
       }
     ],
@@ -12951,8 +12970,8 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: Can you help me?.",
-        "fr": "Tu peux m'aider ?.",
+        "en": "Can you help me?",
+        "fr": "Tu peux m'aider ?",
         "tense": null
       }
     ],
@@ -12986,8 +13005,8 @@ export const CARDS = [
     "accepted": [],
     "examples": [
       {
-        "en": "You can say: Do you understand?.",
-        "fr": "Tu comprends ?.",
+        "en": "Do you understand?",
+        "fr": "Tu comprends ?",
         "tense": null
       }
     ],
@@ -18098,7 +18117,7 @@ export const CARDS = [
     "examples": [
       {
         "en": "I have a runny nose.",
-        "fr": "J'ai nez qui coule.",
+        "fr": "J'ai le nez qui coule.",
         "tense": null
       }
     ],
@@ -20633,13 +20652,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write IMO online.",
-        "fr": "Les gens écrivent souvent à mon avis en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "word",
     "cefr": "A2",
@@ -20661,18 +20674,20 @@ export const CARDS = [
     "id": "anglais_moderne_abreviations_tbh",
     "kind": "word",
     "theme": "Anglais moderne",
-    "category": "expression",
-    "group": "anglais_moderne_abréviations",
+    "category": "slang",
+    "group": "slang_common",
     "fr": "pour être honnête",
     "en": "TBH",
     "difficulty": "medium",
-    "priority": 70,
-    "accepted": [],
+    "priority": 90,
+    "accepted": [
+      "pour être honnête",
+      "franchement"
+    ],
     "examples": [
       {
-        "en": "People often write TBH online.",
-        "fr": "Les gens écrivent souvent pour être honnête en ligne.",
-        "tense": null
+        "en": "TBH, I agree.",
+        "fr": "Pour être honnête, je suis d'accord."
       }
     ],
     "notes": "",
@@ -20690,24 +20705,32 @@ export const CARDS = [
     "correctAnswer": "TBH",
     "validationStatus": "validated",
     "frequency": "common",
-    "source": "better_english_v10"
+    "source": "better_english_v10",
+    "qualityScore": 100
   },
   {
     "id": "anglais_moderne_abreviations_ngl",
     "kind": "word",
     "theme": "Anglais moderne",
-    "category": "expression",
-    "group": "anglais_moderne_abréviations",
-    "fr": "je ne vais pas mentir",
+    "category": "slang",
+    "group": "slang_common",
+    "fr": "pour être honnête",
     "en": "NGL",
     "difficulty": "medium",
-    "priority": 70,
-    "accepted": [],
+    "priority": 90,
+    "accepted": [
+      "pour être honnête",
+      "franchement",
+      "not gonna lie"
+    ],
     "examples": [
       {
-        "en": "People often write NGL online.",
-        "fr": "Les gens écrivent souvent je ne vais pas mentir en ligne.",
-        "tense": null
+        "en": "NGL, this is hard.",
+        "fr": "Pour être honnête, c'est difficile."
+      },
+      {
+        "en": "NGL, I like it.",
+        "fr": "Franchement, j'aime bien."
       }
     ],
     "notes": "",
@@ -20725,24 +20748,31 @@ export const CARDS = [
     "correctAnswer": "NGL",
     "validationStatus": "validated",
     "frequency": "common",
-    "source": "better_english_v10"
+    "source": "better_english_v10",
+    "qualityScore": 100
   },
   {
     "id": "anglais_moderne_abreviations_idk",
     "kind": "word",
     "theme": "Anglais moderne",
-    "category": "expression",
-    "group": "anglais_moderne_abréviations",
+    "category": "slang",
+    "group": "slang_common",
     "fr": "je ne sais pas",
     "en": "IDK",
     "difficulty": "medium",
-    "priority": 70,
-    "accepted": [],
+    "priority": 90,
+    "accepted": [
+      "je ne sais pas",
+      "j'en sais rien"
+    ],
     "examples": [
       {
-        "en": "People often write IDK online.",
-        "fr": "Les gens écrivent souvent je ne sais pas en ligne.",
-        "tense": null
+        "en": "IDK.",
+        "fr": "Je ne sais pas."
+      },
+      {
+        "en": "IDK what to do.",
+        "fr": "Je ne sais pas quoi faire."
       }
     ],
     "notes": "",
@@ -20760,24 +20790,27 @@ export const CARDS = [
     "correctAnswer": "IDK",
     "validationStatus": "validated",
     "frequency": "common",
-    "source": "better_english_v10"
+    "source": "better_english_v10",
+    "qualityScore": 100
   },
   {
     "id": "anglais_moderne_abreviations_brb",
     "kind": "word",
     "theme": "Anglais moderne",
-    "category": "expression",
-    "group": "anglais_moderne_abréviations",
-    "fr": "je reviens",
+    "category": "slang",
+    "group": "slang_common",
+    "fr": "je reviens tout de suite",
     "en": "BRB",
     "difficulty": "medium",
-    "priority": 70,
-    "accepted": [],
+    "priority": 90,
+    "accepted": [
+      "je reviens tout de suite",
+      "je reviens"
+    ],
     "examples": [
       {
-        "en": "People often write BRB online.",
-        "fr": "Les gens écrivent souvent je reviens en ligne.",
-        "tense": null
+        "en": "BRB.",
+        "fr": "Je reviens tout de suite."
       }
     ],
     "notes": "",
@@ -20795,7 +20828,8 @@ export const CARDS = [
     "correctAnswer": "BRB",
     "validationStatus": "validated",
     "frequency": "common",
-    "source": "better_english_v10"
+    "source": "better_english_v10",
+    "qualityScore": 100
   },
   {
     "id": "anglais_moderne_abreviations_gtg",
@@ -20808,13 +20842,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write GTG online.",
-        "fr": "Les gens écrivent souvent je dois y aller en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "word",
     "cefr": "A2",
@@ -20843,13 +20871,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write RN online.",
-        "fr": "Les gens écrivent souvent en ce moment en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "word",
     "cefr": "A2",
@@ -20871,18 +20893,20 @@ export const CARDS = [
     "id": "anglais_moderne_abreviations_btw",
     "kind": "word",
     "theme": "Anglais moderne",
-    "category": "expression",
-    "group": "anglais_moderne_abréviations",
+    "category": "slang",
+    "group": "slang_common",
     "fr": "au fait",
     "en": "BTW",
     "difficulty": "medium",
-    "priority": 70,
-    "accepted": [],
+    "priority": 90,
+    "accepted": [
+      "au fait",
+      "à propos"
+    ],
     "examples": [
       {
-        "en": "People often write BTW online.",
-        "fr": "Les gens écrivent souvent au fait en ligne.",
-        "tense": null
+        "en": "BTW, I sent you the link.",
+        "fr": "Au fait, je t'ai envoyé le lien."
       }
     ],
     "notes": "",
@@ -20900,7 +20924,8 @@ export const CARDS = [
     "correctAnswer": "BTW",
     "validationStatus": "validated",
     "frequency": "common",
-    "source": "better_english_v10"
+    "source": "better_english_v10",
+    "qualityScore": 100
   },
   {
     "id": "anglais_moderne_abreviations_lol",
@@ -20913,13 +20938,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write LOL online.",
-        "fr": "Les gens écrivent souvent mort de rire en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "word",
     "cefr": "A2",
@@ -20948,13 +20967,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write LMAO online.",
-        "fr": "Les gens écrivent souvent énormément drôle en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "word",
     "cefr": "A2",
@@ -20983,13 +20996,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write OMG online.",
-        "fr": "Les gens écrivent souvent oh mon dieu en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "word",
     "cefr": "A2",
@@ -21018,13 +21025,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write WYD online.",
-        "fr": "Les gens écrivent souvent que fais-tu ? en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "word",
     "cefr": "A2",
@@ -21053,13 +21054,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write WYLL online.",
-        "fr": "Les gens écrivent souvent tu ressembles à quoi ? en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "word",
     "cefr": "A2",
@@ -21088,13 +21083,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write GG online.",
-        "fr": "Les gens écrivent souvent bon jeu en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "word",
     "cefr": "A2",
@@ -21123,13 +21112,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write AFK online.",
-        "fr": "Les gens écrivent souvent absent du clavier en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "word",
     "cefr": "A2",
@@ -21152,17 +21135,25 @@ export const CARDS = [
     "kind": "phrase",
     "theme": "Anglais moderne",
     "category": "expression",
-    "group": "anglais_moderne_expressions_naturelles",
-    "fr": "pas de souci",
-    "en": "no worries",
+    "group": "expressions_common",
+    "fr": "Pas de souci !",
+    "en": "No worries!",
     "difficulty": "medium",
-    "priority": 70,
-    "accepted": [],
+    "priority": 90,
+    "accepted": [
+      "pas de souci",
+      "aucun souci",
+      "t'inquiète",
+      "pas de problème"
+    ],
     "examples": [
       {
-        "en": "People often write no worries online.",
-        "fr": "Les gens écrivent souvent pas de souci en ligne.",
-        "tense": null
+        "en": "No worries!",
+        "fr": "Pas de souci !"
+      },
+      {
+        "en": "No worries, I can help.",
+        "fr": "Pas de souci, je peux aider."
       }
     ],
     "notes": "",
@@ -21180,7 +21171,8 @@ export const CARDS = [
     "correctAnswer": "no worries",
     "validationStatus": "validated",
     "frequency": "common",
-    "source": "better_english_v10"
+    "source": "better_english_v10",
+    "qualityScore": 100
   },
   {
     "id": "anglais_moderne_expressions_naturelles_my_bad",
@@ -21193,13 +21185,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write my bad online.",
-        "fr": "Les gens écrivent souvent ma faute en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "phrase",
     "cefr": "A2",
@@ -21228,13 +21214,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write sounds good online.",
-        "fr": "Les gens écrivent souvent ça marche en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "phrase",
     "cefr": "A2",
@@ -21263,13 +21243,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write I'm down online.",
-        "fr": "Les gens écrivent souvent je suis chaud en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "phrase",
     "cefr": "A2",
@@ -21298,13 +21272,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write fair enough online.",
-        "fr": "Les gens écrivent souvent c'est juste en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "phrase",
     "cefr": "A2",
@@ -21333,13 +21301,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write give me a sec online.",
-        "fr": "Les gens écrivent souvent laisse-moi une seconde en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "phrase",
     "cefr": "A2",
@@ -21368,13 +21330,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write no way online.",
-        "fr": "Les gens écrivent souvent pas question en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "phrase",
     "cefr": "A2",
@@ -21403,13 +21359,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write go ahead online.",
-        "fr": "Les gens écrivent souvent vas-y en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "phrase",
     "cefr": "A2",
@@ -21438,13 +21388,7 @@ export const CARDS = [
     "difficulty": "medium",
     "priority": 70,
     "accepted": [],
-    "examples": [
-      {
-        "en": "People often write it depends online.",
-        "fr": "Les gens écrivent souvent ça dépend en ligne.",
-        "tense": null
-      }
-    ],
+    "examples": [],
     "notes": "",
     "type": "phrase",
     "cefr": "A2",
@@ -21466,18 +21410,25 @@ export const CARDS = [
     "id": "anglais_moderne_expressions_naturelles_whatever",
     "kind": "word",
     "theme": "Anglais moderne",
-    "category": "expression",
-    "group": "anglais_moderne_expressions_naturelles",
+    "category": "slang",
+    "group": "slang_common",
     "fr": "peu importe",
     "en": "whatever",
     "difficulty": "medium",
-    "priority": 70,
-    "accepted": [],
+    "priority": 90,
+    "accepted": [
+      "peu importe",
+      "n'importe quoi",
+      "comme tu veux"
+    ],
     "examples": [
       {
-        "en": "People often write whatever online.",
-        "fr": "Les gens écrivent souvent peu importe en ligne.",
-        "tense": null
+        "en": "Whatever.",
+        "fr": "Peu importe."
+      },
+      {
+        "en": "Do whatever you want.",
+        "fr": "Fais ce que tu veux."
       }
     ],
     "notes": "",
@@ -21495,7 +21446,8 @@ export const CARDS = [
     "correctAnswer": "whatever",
     "validationStatus": "validated",
     "frequency": "common",
-    "source": "better_english_v10"
+    "source": "better_english_v10",
+    "qualityScore": 100
   },
   {
     "id": "animaux_ferme_cow",
@@ -26974,6 +26926,122 @@ export const CARDS = [
     "source": "better_english_v10_2",
     "validationStatus": "validated",
     "qualityScore": 100
+  },
+  {
+    "id": "conversation_question_what_s_your_name",
+    "kind": "phrase",
+    "type": "phrase",
+    "theme": "Conversation",
+    "category": "question",
+    "group": "basic_questions",
+    "fr": "Comment tu t'appelles ?",
+    "en": "What's your name?",
+    "difficulty": "easy",
+    "difficultyScore": 1,
+    "cefr": "A1",
+    "priority": 92,
+    "frequency": "common",
+    "tags": [
+      "question"
+    ],
+    "keywords": [
+      "Comment tu t'appelles ?",
+      "What's your name?",
+      "question"
+    ],
+    "mainWord": "What's your name?",
+    "mainVerb": null,
+    "verbTense": null,
+    "correctAnswer": "What's your name?",
+    "accepted": [
+      "what is your name"
+    ],
+    "examples": [
+      {
+        "en": "What's your name?",
+        "fr": "Comment tu t'appelles ?"
+      }
+    ],
+    "notes": "",
+    "source": "better_english_v10_5_validated",
+    "validationStatus": "validated",
+    "qualityScore": 100
+  },
+  {
+    "id": "sante_symptom_i_have_a_runny_nose",
+    "kind": "phrase",
+    "type": "phrase",
+    "theme": "Santé",
+    "category": "symptom",
+    "group": "health_phrases",
+    "fr": "J'ai le nez qui coule.",
+    "en": "I have a runny nose.",
+    "difficulty": "easy",
+    "difficultyScore": 1,
+    "cefr": "A1",
+    "priority": 92,
+    "frequency": "common",
+    "tags": [
+      "health"
+    ],
+    "keywords": [
+      "J'ai le nez qui coule.",
+      "I have a runny nose.",
+      "health"
+    ],
+    "mainWord": "I have a runny nose.",
+    "mainVerb": null,
+    "verbTense": null,
+    "correctAnswer": "I have a runny nose.",
+    "accepted": [],
+    "examples": [
+      {
+        "en": "I have a runny nose.",
+        "fr": "J'ai le nez qui coule."
+      }
+    ],
+    "notes": "",
+    "source": "better_english_v10_5_validated",
+    "validationStatus": "validated",
+    "qualityScore": 100
+  },
+  {
+    "id": "sante_symptom_i_have_a_headache",
+    "kind": "phrase",
+    "type": "phrase",
+    "theme": "Santé",
+    "category": "symptom",
+    "group": "health_phrases",
+    "fr": "J'ai mal à la tête.",
+    "en": "I have a headache.",
+    "difficulty": "easy",
+    "difficultyScore": 1,
+    "cefr": "A1",
+    "priority": 92,
+    "frequency": "common",
+    "tags": [
+      "health"
+    ],
+    "keywords": [
+      "J'ai mal à la tête.",
+      "I have a headache.",
+      "health"
+    ],
+    "mainWord": "I have a headache.",
+    "mainVerb": null,
+    "verbTense": null,
+    "correctAnswer": "I have a headache.",
+    "accepted": [],
+    "examples": [
+      {
+        "en": "I have a headache.",
+        "fr": "J'ai mal à la tête."
+      }
+    ],
+    "notes": "",
+    "source": "better_english_v10_5_validated",
+    "validationStatus": "validated",
+    "qualityScore": 100
   }
 ];
 
@@ -27127,7 +27195,7 @@ function makeTranslate(card, direction) {
     accepted:answerVariants(card.fr),
     explain:explain(card), example:ex?.en || "", translation:ex?.fr || ""
   }));
-  return out;
+  return out.filter(naturalExerciseGuard);
 }
 
 function makeFill(card, direction) {
@@ -27365,6 +27433,24 @@ function makeQcm(card, direction, scoped) {
 
 
   return out;
+}
+
+
+function naturalExerciseGuard(ex) {
+  const text = `${ex.question || ""} ${ex.answer || ""} ${ex.translation || ""} ${ex.example || ""}`.toLowerCase();
+  const blocked = [
+    "people often write",
+    "les gens écrivent souvent",
+    "tu peux dire",
+    "you can say",
+    "on peut dire",
+    "on dit :",
+    "en anglais :",
+    "j'ai nez",
+    "le/la ",
+    "un/une "
+  ];
+  return !blocked.some(x => text.includes(x));
 }
 
 export function filterCards(cards, filters) {

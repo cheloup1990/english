@@ -5,7 +5,7 @@ import { Home, PenLine, BookOpen, User } from "lucide-react";
 import { CARDS, THEMES, generateExercises, QUALITY_REPORT, normalize, LESSONS, CHAPTERS } from "./data";
 import "./styles.css";
 
-const KEY = "better-english-v10-4";
+const KEY = "better-english-v10-5";
 
 const defaultState = {
   name: "Jeremy",
@@ -493,8 +493,8 @@ function App() {
         <section className="screen active">
           <div className="hero-card">
             <div className="hero-inner">
-              <div className="hero-label">V10.4.4.3a</div>
-              <h2 className="hero-title">Correction intelligente</h2>
+              <div className="hero-label">V10.5.5.4.3a</div>
+              <h2 className="hero-title">Base nettoyée</h2>
               <p className="hero-sub">Better English apprend l’anglais qu’on rencontre dans la vraie vie, pas l’anglais des manuels scolaires.</p>
               <div className="progress"><span style={{ width: `${state.xp % 100}%` }} /></div>
               <button className="btn full" onClick={() => setTab("exercise")}>Continuer</button>
