@@ -5,7 +5,7 @@ import { Home, PenLine, BookOpen, User } from "lucide-react";
 import { CARDS, THEMES, generateExercises, QUALITY_REPORT, normalize, LESSONS, CHAPTERS } from "./data";
 import "./styles.css";
 
-const KEY = "better-english-v10-5a";
+const KEY = "better-english-v10-5b";
 
 const defaultState = {
   name: "Jeremy",
@@ -493,7 +493,7 @@ function App() {
         <section className="screen active">
           <div className="hero-card">
             <div className="hero-inner">
-              <div className="hero-label">V10.5a.5a.5.4.3a</div>
+              <div className="hero-label">V10.5b.5a.5.4.3a</div>
               <h2 className="hero-title">Prononciation + base propre</h2>
               <p className="hero-sub">Better English apprend l’anglais qu’on rencontre dans la vraie vie, pas l’anglais des manuels scolaires.</p>
               <div className="progress"><span style={{ width: `${state.xp % 100}%` }} /></div>
@@ -731,17 +731,22 @@ function LetterSoundGrid({ letters }) {
   );
 }
 
+
 function ChapterBlock({ chapter, lessons, completed, tests, onTrain, onComplete, onTest }) {
-  const [openChapter, setOpenChapter] = React.useState(chapter.unlocked);
+  const [openChapter, setOpenChapter] = React.useState(Boolean(chapter.unlocked));
   const [openLesson, setOpenLesson] = React.useState(null);
   const doneCount = lessons.filter((l) => completed[l.id]).length;
   const pct = lessons.length ? Math.round((doneCount / lessons.length) * 100) : 0;
   const locked = !chapter.unlocked;
   const test = tests[chapter.id];
 
+  function toggleLesson(id) {
+    setOpenLesson((current) => current === id ? null : id);
+  }
+
   return (
     <div className={`card chapter-block ${locked ? "locked" : ""}`}>
-      <button className="chapter-head" onClick={() => !locked && setOpenChapter(!openChapter)}>
+      <button type="button" className="chapter-head" onClick={() => !locked && setOpenChapter(!openChapter)}>
         <div>
           <small>{chapter.level || "A1"}</small>
           <h2>{chapter.order}. {chapter.title}</h2>
@@ -755,43 +760,51 @@ function ChapterBlock({ chapter, lessons, completed, tests, onTrain, onComplete,
           <div className="progress"><span style={{ width: `${pct}%` }} /></div>
           <p className="muted">{doneCount}/{lessons.length} leçons terminées</p>
 
-          {lessons.map((lesson) => (
-            <div className={`lesson-row ${completed[lesson.id] ? "done" : ""}`} key={lesson.id}>
-              <button className="lesson-row-head" onClick={() => setOpenLesson(openLesson === lesson.id ? null : lesson.id)}>
-                <div>
-                  <small>{lesson.level} · {lesson.duration}</small>
-                  <b>{lesson.order}. {lesson.title}</b>
-                  <span>{lesson.objective}</span>
-                </div>
-                <em>{openLesson === lesson.id ? "Replier" : "Ouvrir"}</em>
-              </button>
+          {lessons.map((lesson) => {
+            const opened = openLesson === lesson.id;
+            return (
+              <div className={`lesson-row ${completed[lesson.id] ? "done" : ""}`} key={lesson.id}>
+                <button type="button" className="lesson-row-head" onClick={() => toggleLesson(lesson.id)}>
+                  <div>
+                    <small>{lesson.level} · {lesson.duration}</small>
+                    <b>{lesson.order}. {lesson.title}</b>
+                    <span>{lesson.objective}</span>
+                  </div>
+                  <em>{opened ? "Replier" : "Ouvrir"}</em>
+                </button>
 
-              {openLesson === lesson.id && (
-                <div className="lesson-body">
-                  {lesson.sections.map((section, index) => (
-                    <div className="lesson-section" key={index}>
-                      <h3>{section.title}</h3>
-                      <p>{section.body}</p>
+                {opened && (
+                  <div className="lesson-body">
+                    {(lesson.sections || []).map((section, index) => (
+                      <div className="lesson-section" key={index}>
+                        <h3>{section.title}</h3>
+                        <p>{section.body}</p>
+                      </div>
+                    ))}
+
+                    {lesson.letterSounds?.length > 0 && <LetterSoundGrid letters={lesson.letterSounds} />}
+
+                    <div className="lesson-summary">
+                      <h3>Résumé</h3>
+                      {(lesson.summary || []).map((item, index) => <p key={index}>✓ {item}</p>)}
                     </div>
-                  ))}
-                  {lesson.letterSounds && <LetterSoundGrid letters={lesson.letterSounds} />}
-                  <div className="lesson-summary">
-                    <h3>Résumé</h3>
-                    {lesson.summary.map((item, index) => <p key={index}>✓ {item}</p>)}
+
+                    <div className="row">
+                      <button type="button" className="btn" onClick={() => onTrain(lesson)}>S'entraîner</button>
+                      <button type="button" className="btn secondary" onClick={() => onComplete(lesson)}>
+                        {completed[lesson.id] ? "Déjà terminé" : "Marquer terminé"}
+                      </button>
+                    </div>
                   </div>
-                  <div className="row">
-                    <button className="btn" onClick={() => onTrain(lesson)}>S'entraîner</button>
-                    <button className="btn secondary" onClick={() => onComplete(lesson)}>{completed[lesson.id] ? "Déjà terminé" : "Marquer terminé"}</button>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            );
+          })}
 
           <div className="chapter-test">
             <div className="section-title"><h3>Test du chapitre</h3><span className="tag">40 questions</span></div>
             <p className="muted">40 questions uniquement sur ce chapitre.</p>
-            {test ? <p className="test-score">Score : {test.score}% · {test.stars}/3 étoiles</p> : <button className="btn full" onClick={onTest}>Commencer le test</button>}
+            {test ? <p className="test-score">Score : {test.score}% · {test.stars}/3 étoiles</p> : <button type="button" className="btn full" onClick={onTest}>Commencer le test</button>}
           </div>
         </div>
       )}
