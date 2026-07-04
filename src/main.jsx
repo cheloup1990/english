@@ -5,7 +5,7 @@ import { Home, PenLine, BookOpen, User } from "lucide-react";
 import { CARDS, THEMES, generateExercises, QUALITY_REPORT, normalize, LESSONS, CHAPTERS } from "./data";
 import "./styles.css";
 
-const KEY = "better-english-v10-5c";
+const KEY = "better-english-v10-5d";
 
 const defaultState = {
   name: "Jeremy",
@@ -217,6 +217,7 @@ function App() {
   const [selected, setSelected] = useState("");
   const [feedback, setFeedback] = useState(null);
   const [chapterTest, setChapterTest] = useState(null);
+  const [activeLesson, setActiveLesson] = useState(null);
   const [filterOpen, setFilterOpen] = useState("theme");
   const [nameInput, setNameInput] = useState(state.name);
   const [navHidden, setNavHidden] = useState(false);
@@ -487,14 +488,32 @@ function App() {
         </section>
       )}
 
-      {!chapterTest && <>
+      {activeLesson && (
+        <section className="screen active">
+          <LessonPlayer
+            lesson={activeLesson}
+            onBack={() => setActiveLesson(null)}
+            done={!!state.completedLessons?.[activeLesson.id]}
+            onComplete={() => {
+              setState((s) => ({
+                ...s,
+                completedLessons: { ...(s.completedLessons || {}), [activeLesson.id]: true },
+                xp: s.xp + 30,
+              }));
+              setActiveLesson(null);
+            }}
+          />
+        </section>
+      )}
+
+      {!chapterTest && !activeLesson && <>
 
       {tab === "home" && (
         <section className="screen active">
           <div className="hero-card">
             <div className="hero-inner">
-              <div className="hero-label">V10.5cc.5a.5.4.3a</div>
-              <h2 className="hero-title">Quiz lettres</h2>
+              <div className="hero-label">V10.5ddc.5a.5.4.3a</div>
+              <h2 className="hero-title">Leçons interactives</h2>
               <p className="hero-sub">Better English apprend l’anglais qu’on rencontre dans la vraie vie, pas l’anglais des manuels scolaires.</p>
               <div className="progress"><span style={{ width: `${state.xp % 100}%` }} /></div>
               <button className="btn full" onClick={() => setTab("exercise")}>Continuer</button>
@@ -640,24 +659,7 @@ function App() {
               lessons={LESSONS.filter((l) => l.chapterId === chapter.id)}
               completed={state.completedLessons || {}}
               tests={state.chapterTests || {}}
-              onTrain={(lesson) => {
-                setState((s) => ({
-                  ...s,
-                  type: lesson.train?.type || "mix",
-                  themes: lesson.train?.themes || ["Mix"],
-                  direction: lesson.train?.direction || "mix",
-                  difficulty: lesson.train?.difficulty || "all",
-                  mode: "learn",
-                }));
-                setTab("exercise");
-              }}
-              onComplete={(lesson) => {
-                setState((s) => ({
-                  ...s,
-                  completedLessons: { ...(s.completedLessons || {}), [lesson.id]: true },
-                  xp: s.xp + 30,
-                }));
-              }}
+              onOpenLesson={(lesson) => setActiveLesson(lesson)}
               onTest={startChapterTest}
             />
           ))}
@@ -717,6 +719,20 @@ function speakEnglish(text) {
 }
 
 
+
+function speakEnglish(text) {
+  try {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US";
+    utterance.rate = 0.75;
+    window.speechSynthesis.speak(utterance);
+  } catch (e) {
+    console.warn("Speech synthesis unavailable", e);
+  }
+}
+
 function shuffleArray(list) {
   const arr = [...list];
   for (let i = arr.length - 1; i > 0; i--) {
@@ -731,7 +747,95 @@ function makeLetterOptions(correct, letters) {
   return shuffleArray([correct, ...shuffleArray(others).slice(0, 3)]).map((l) => l.letter);
 }
 
-function LetterSoundGrid({ letters }) {
+function ChapterBlock({ chapter, lessons, completed, tests, onOpenLesson, onTest }) {
+  const [openChapter, setOpenChapter] = React.useState(Boolean(chapter.unlocked));
+  const doneCount = lessons.filter((l) => completed[l.id]).length;
+  const pct = lessons.length ? Math.round((doneCount / lessons.length) * 100) : 0;
+  const locked = !chapter.unlocked;
+  const test = tests[chapter.id];
+
+  return (
+    <div className={`card chapter-block ${locked ? "locked" : ""}`}>
+      <button type="button" className="chapter-head" onClick={() => !locked && setOpenChapter(!openChapter)}>
+        <div>
+          <small>{chapter.level || "A1"}</small>
+          <h2>{chapter.order}. {chapter.title}</h2>
+          <p>{chapter.description}</p>
+        </div>
+        <span className="tag">{locked ? "Verrouillé" : `${pct}%`}</span>
+      </button>
+
+      {!locked && openChapter && (
+        <div className="chapter-body">
+          <div className="progress"><span style={{ width: `${pct}%` }} /></div>
+          <p className="muted">{doneCount}/{lessons.length} leçons terminées</p>
+
+          {lessons.map((lesson) => (
+            <div className={`lesson-row ${completed[lesson.id] ? "done" : ""}`} key={lesson.id}>
+              <button type="button" className="lesson-row-head" onClick={() => onOpenLesson(lesson)}>
+                <div>
+                  <small>{lesson.level} · {lesson.duration}</small>
+                  <b>{lesson.order}. {lesson.title}</b>
+                  <span>{lesson.objective}</span>
+                </div>
+                <em>{completed[lesson.id] ? "Revoir" : "Ouvrir"}</em>
+              </button>
+            </div>
+          ))}
+
+          <div className="chapter-test">
+            <div className="section-title"><h3>Test du chapitre</h3><span className="tag">40 questions</span></div>
+            <p className="muted">40 questions uniquement sur ce chapitre.</p>
+            {test ? <p className="test-score">Score : {test.score}% · {test.stars}/3 étoiles</p> : <button type="button" className="btn full" onClick={onTest}>Commencer le test</button>}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function LessonPlayer({ lesson, onBack, onComplete, done }) {
+  const isLetterLesson = lesson.interactiveType === "letter_pronunciation" || lesson.letterSounds?.length;
+
+  return (
+    <div className="lesson-player card">
+      <div className="lesson-player-head">
+        <button type="button" className="back-btn" onClick={onBack}>Retour</button>
+        <span className="tag">{lesson.level} · {lesson.duration}</span>
+      </div>
+
+      <h2>{lesson.title}</h2>
+      <p className="muted">{lesson.objective}</p>
+
+      {(lesson.sections || []).map((section, index) => (
+        <div className="lesson-section" key={index}>
+          <h3>{section.title}</h3>
+          <p>{section.body}</p>
+        </div>
+      ))}
+
+      {isLetterLesson ? (
+        <LetterPronunciationLesson letters={lesson.letterSounds || []} />
+      ) : (
+        <div className="lesson-summary">
+          <h3>Exercices de leçon</h3>
+          <p>Les mini-exercices intégrés seront ajoutés sur cette leçon après validation du modèle.</p>
+        </div>
+      )}
+
+      <div className="lesson-summary">
+        <h3>Résumé</h3>
+        {(lesson.summary || []).map((item, index) => <p key={index}>✓ {item}</p>)}
+      </div>
+
+      <button type="button" className="btn full" onClick={onComplete}>
+        {done ? "Leçon déjà terminée" : "Terminer la leçon"}
+      </button>
+    </div>
+  );
+}
+
+function LetterPronunciationLesson({ letters }) {
   const [quiz, setQuiz] = React.useState(null);
 
   function startQuiz() {
@@ -749,9 +853,21 @@ function LetterSoundGrid({ letters }) {
     setTimeout(() => speakEnglish(current.speech || current.letter), 150);
   }
 
-  function nextQuestion() {
+  function choose(letter) {
     setQuiz((q) => {
       if (!q) return q;
+      const good = letter === q.current.letter;
+      return {
+        ...q,
+        selected: letter,
+        feedback: good ? "Correct." : `À revoir. C'était la lettre ${q.current.letter}.`
+      };
+    });
+  }
+
+  function nextQuestion() {
+    setQuiz((q) => {
+      if (!q || !q.selected) return q;
       const nextIndex = q.index + 1;
 
       if (nextIndex >= q.cycle.length) {
@@ -778,18 +894,6 @@ function LetterSoundGrid({ letters }) {
         options: makeLetterOptions(current, letters),
         selected: "",
         feedback: ""
-      };
-    });
-  }
-
-  function choose(letter) {
-    setQuiz((q) => {
-      if (!q) return q;
-      const good = letter === q.current.letter;
-      return {
-        ...q,
-        selected: letter,
-        feedback: good ? "Correct." : `À revoir. C'était la lettre ${q.current.letter}.`
       };
     });
   }
@@ -849,86 +953,6 @@ function LetterSoundGrid({ letters }) {
           </>
         )}
       </div>
-    </div>
-  );
-}
-
-function ChapterBlock({ chapter, lessons, completed, tests, onTrain, onComplete, onTest }) {
-  const [openChapter, setOpenChapter] = React.useState(Boolean(chapter.unlocked));
-  const [openLesson, setOpenLesson] = React.useState(null);
-  const doneCount = lessons.filter((l) => completed[l.id]).length;
-  const pct = lessons.length ? Math.round((doneCount / lessons.length) * 100) : 0;
-  const locked = !chapter.unlocked;
-  const test = tests[chapter.id];
-
-  function toggleLesson(id) {
-    setOpenLesson((current) => current === id ? null : id);
-  }
-
-  return (
-    <div className={`card chapter-block ${locked ? "locked" : ""}`}>
-      <button type="button" className="chapter-head" onClick={() => !locked && setOpenChapter(!openChapter)}>
-        <div>
-          <small>{chapter.level || "A1"}</small>
-          <h2>{chapter.order}. {chapter.title}</h2>
-          <p>{chapter.description}</p>
-        </div>
-        <span className="tag">{locked ? "Verrouillé" : `${pct}%`}</span>
-      </button>
-
-      {!locked && openChapter && (
-        <div className="chapter-body">
-          <div className="progress"><span style={{ width: `${pct}%` }} /></div>
-          <p className="muted">{doneCount}/{lessons.length} leçons terminées</p>
-
-          {lessons.map((lesson) => {
-            const opened = openLesson === lesson.id;
-            return (
-              <div className={`lesson-row ${completed[lesson.id] ? "done" : ""}`} key={lesson.id}>
-                <button type="button" className="lesson-row-head" onClick={() => toggleLesson(lesson.id)}>
-                  <div>
-                    <small>{lesson.level} · {lesson.duration}</small>
-                    <b>{lesson.order}. {lesson.title}</b>
-                    <span>{lesson.objective}</span>
-                  </div>
-                  <em>{opened ? "Replier" : "Ouvrir"}</em>
-                </button>
-
-                {opened && (
-                  <div className="lesson-body">
-                    {(lesson.sections || []).map((section, index) => (
-                      <div className="lesson-section" key={index}>
-                        <h3>{section.title}</h3>
-                        <p>{section.body}</p>
-                      </div>
-                    ))}
-
-                    {lesson.letterSounds?.length > 0 && <LetterSoundGrid letters={lesson.letterSounds} />}
-
-                    <div className="lesson-summary">
-                      <h3>Résumé</h3>
-                      {(lesson.summary || []).map((item, index) => <p key={index}>✓ {item}</p>)}
-                    </div>
-
-                    <div className="row">
-                      <button type="button" className="btn" onClick={() => onTrain(lesson)}>S'entraîner</button>
-                      <button type="button" className="btn secondary" onClick={() => onComplete(lesson)}>
-                        {completed[lesson.id] ? "Déjà terminé" : "Marquer terminé"}
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-
-          <div className="chapter-test">
-            <div className="section-title"><h3>Test du chapitre</h3><span className="tag">40 questions</span></div>
-            <p className="muted">40 questions uniquement sur ce chapitre.</p>
-            {test ? <p className="test-score">Score : {test.score}% · {test.stars}/3 étoiles</p> : <button type="button" className="btn full" onClick={onTest}>Commencer le test</button>}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

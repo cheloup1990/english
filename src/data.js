@@ -27636,7 +27636,8 @@ export const LESSONS = [
         "letter": "Z",
         "speech": "zee"
       }
-    ]
+    ],
+    "interactiveType": "letter_pronunciation"
   },
   {
     "id": "a1_ch1_pronouns",

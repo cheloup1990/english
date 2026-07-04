@@ -1,14 +1,18 @@
-# Better English V10.5c — Quiz lettres
+# Better English V10.5d — Leçons interactives reforgées
 
-## Ajout
-- Première leçon : Prononciation des lettres sans IPA.
-- Bouton Écouter pour chaque lettre.
-- Quiz d'écoute intégré dans la leçon.
-- Les 26 lettres passent une seule fois par cycle.
-- Aucun doublon avant la fin du cycle.
-- Nouveau mélange aléatoire à chaque cycle.
-- Compteur 1/26 → 26/26.
-- Bouton Réécouter illimité.
+## Corrigé
+- Le bouton Ouvrir ne renvoie plus vers S'entraîner.
+- Une vraie page de leçon s'ouvre dans l'application.
+- La leçon Prononciation des lettres contient :
+  - les 26 lettres ;
+  - bouton Écouter ;
+  - quiz d'écoute intégré ;
+  - compteur 1/26 ;
+  - bouton Réécouter ;
+  - cycle aléatoire sans répétition ;
+  - nouveau mélange après les 26 lettres.
+- Pas d'IPA affichée.
+- Le bouton S'entraîner n'est plus utilisé dans cette leçon.
 
 ## Déployer
 ```bash

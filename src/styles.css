@@ -685,3 +685,105 @@ button,input{font:inherit}button{border:0;cursor:pointer;-webkit-tap-highlight-c
 @media(max-width:520px){
   .letter-sound-grid{grid-template-columns:1fr!important}
 }
+
+/* --- V10.5d Interactive lesson player --- */
+.lesson-player{
+  margin-top:18px;
+}
+.lesson-player-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:12px;
+}
+.back-btn{
+  border:1px solid #DED4FF;
+  background:#F6F1FF;
+  color:var(--violet-dark);
+  font-weight:950;
+  border-radius:999px;
+  padding:9px 12px;
+  cursor:pointer;
+}
+.lesson-player h2{
+  margin:6px 0 6px;
+  font-size:26px;
+}
+.letter-lesson{
+  margin:12px 0 14px;
+}
+.letter-sound-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:10px!important;
+  margin:12px 0 14px!important;
+}
+.letter-sound-card{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  padding:12px!important;
+  border-radius:18px!important;
+  background:linear-gradient(135deg,#FFFFFF,#F7F3FF)!important;
+  border:1px solid #E3DAFF!important;
+}
+.letter-sound-card strong{
+  font-size:26px!important;
+  color:var(--violet-dark)!important;
+}
+.letter-sound-card button,
+.replay-btn{
+  border:0!important;
+  border-radius:999px!important;
+  padding:9px 12px!important;
+  background:linear-gradient(135deg,#6D4AFF,#8D6DFF)!important;
+  color:#fff!important;
+  font-weight:950!important;
+  cursor:pointer!important;
+}
+.letter-quiz-card{
+  margin-top:14px;
+  padding:15px;
+  border-radius:24px;
+  background:linear-gradient(145deg,#FBFAFF,#F1EAFF);
+  border:1px solid #DED4FF;
+}
+.letter-options{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin:14px 0;
+}
+.letter-option{
+  border:1px solid #DDD2FF;
+  border-radius:20px;
+  padding:16px;
+  background:#fff;
+  color:#271C48;
+  font-size:24px;
+  font-weight:950;
+  cursor:pointer;
+}
+.letter-option.good{
+  background:linear-gradient(135deg,#F4FFF8,#E8FFF1);
+  border-color:#9DE7B9;
+}
+.letter-option.bad{
+  background:linear-gradient(135deg,#FFF7F8,#FFF0F2);
+  border-color:#F1A6B5;
+}
+.letter-feedback{
+  font-weight:950;
+  margin:8px 0 12px;
+}
+.letter-feedback.good{color:#167A3D}
+.letter-feedback.soft{color:#8A5A00}
+.cycle-note{
+  text-align:center;
+  margin-top:10px!important;
+}
+@media(max-width:520px){
+  .letter-sound-grid{grid-template-columns:1fr!important}
+}
