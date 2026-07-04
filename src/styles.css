@@ -940,3 +940,107 @@ button,input{font:inherit}button{border:0;cursor:pointer;-webkit-tap-highlight-c
 @media(max-width:520px){
   .letter-sound-grid{grid-template-columns:1fr!important}
 }
+
+/* --- V10.5H polish: cleaner typography and violet usage --- */
+:root{
+  --text-main:#2F2A3D;
+  --text-soft:#5F5674;
+  --violet-line:#B7A2FF;
+  --violet-strong:#6D4AFF;
+}
+body{
+  color:var(--text-main);
+  font-weight:500;
+  line-height:1.55;
+}
+.card,
+.lesson-section,
+.lesson-summary,
+.chapter-test,
+.letter-quiz-card{
+  color:var(--text-main);
+}
+.lesson-section h3,
+.lesson-summary h3{
+  color:var(--text-main)!important;
+  font-weight:800!important;
+  letter-spacing:0!important;
+}
+.lesson-section p,
+.lesson-summary p,
+.chapter-head p,
+.lesson-accordion-head span,
+.letter-quiz-card .muted{
+  color:var(--text-soft)!important;
+  font-weight:600!important;
+  line-height:1.6!important;
+}
+.chapter-head h2,
+.lesson-accordion-head b{
+  color:var(--text-main)!important;
+  font-weight:800!important;
+}
+.chapter-head small,
+.lesson-accordion-head small,
+.tag{
+  color:var(--violet-strong)!important;
+}
+.lesson-accordion{
+  border:2px solid var(--violet-line)!important;
+  background:linear-gradient(135deg,#FFFFFF 0%,#FAF7FF 100%)!important;
+  box-shadow:0 12px 30px rgba(109,74,255,.10)!important;
+}
+.lesson-accordion.open{
+  border-color:#8B5CF6!important;
+  box-shadow:0 16px 36px rgba(109,74,255,.16)!important;
+}
+.lesson-accordion-head em{
+  color:var(--violet-strong)!important;
+  background:#F5F1FF!important;
+  border:1px solid #DED4FF!important;
+}
+.lesson-actions.single{
+  justify-content:flex-end;
+}
+.lesson-actions.single .btn{
+  width:100%;
+}
+.letter-sound-card{
+  border:2px solid #D8CBFF!important;
+  background:#fff!important;
+}
+.letter-sound-card strong{
+  color:var(--text-main)!important;
+  font-weight:800!important;
+}
+.letter-quiz-card{
+  border:2px solid var(--violet-line)!important;
+  background:linear-gradient(145deg,#FFFFFF,#F8F4FF)!important;
+}
+.letter-quiz-card .section-title h3{
+  color:var(--violet-strong)!important;
+  font-weight:800!important;
+}
+.letter-option{
+  background:#fff!important;
+  color:var(--text-main)!important;
+  font-weight:800!important;
+  border:2px solid #E3DAFF!important;
+}
+.letter-option.selected{
+  background:#fff!important;
+  border-color:#7C5CFF!important;
+  box-shadow:0 0 0 3px rgba(124,92,255,.14),0 10px 24px rgba(109,74,255,.10)!important;
+}
+.letter-option.good{
+  background:#F4FFF8!important;
+  border-color:#55C983!important;
+}
+.letter-option.bad{
+  background:#FFF7F8!important;
+  border-color:#E96A82!important;
+}
+.back-btn,
+.lesson-player-head{
+  display:none!important;
+}

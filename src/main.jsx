@@ -5,7 +5,7 @@ import { Home, PenLine, BookOpen, User } from "lucide-react";
 import { CARDS, THEMES, generateExercises, QUALITY_REPORT, normalize, LESSONS, CHAPTERS } from "./data";
 import "./styles.css";
 
-const KEY = "better-english-v10-5g";
+const KEY = "better-english-v10-5h";
 
 const defaultState = {
   name: "Jeremy",
@@ -497,8 +497,8 @@ function App() {
         <section className="screen active">
           <div className="hero-card">
             <div className="hero-inner">
-              <div className="hero-label">V10.5GGdc.5a.5.4.3a</div>
-              <h2 className="hero-title">V10.5G</h2>
+              <div className="hero-label">V10.5HHGdc.5a.5.4.3a</div>
+              <h2 className="hero-title">V10.5HH</h2>
               <p className="hero-sub">Better English apprend l’anglais qu’on rencontre dans la vraie vie, pas l’anglais des manuels scolaires.</p>
               <div className="progress"><span style={{ width: `${state.xp % 100}%` }} /></div>
               <button className="btn full" onClick={() => setTab("exercise")}>Continuer</button>
@@ -777,7 +777,6 @@ function ChapterBlock({ chapter, lessons, completed, tests, onGoExercise, onComp
                   <LessonAccordionContent
                     lesson={lesson}
                     done={done}
-                    onGoExercise={onGoExercise}
                     onComplete={() => onCompleteLesson(lesson)}
                     onUndo={() => onUndoLesson(lesson)}
                   />
@@ -797,7 +796,7 @@ function ChapterBlock({ chapter, lessons, completed, tests, onGoExercise, onComp
   );
 }
 
-function LessonAccordionContent({ lesson, done, onGoExercise, onComplete, onUndo }) {
+function LessonAccordionContent({ lesson, done, onComplete, onUndo }) {
   const isLetterLesson = lesson.interactiveType === "letter_pronunciation" || lesson.letterSounds?.length;
 
   return (
@@ -816,8 +815,7 @@ function LessonAccordionContent({ lesson, done, onGoExercise, onComplete, onUndo
         {(lesson.summary || []).map((item, index) => <p key={index}>✓ {item}</p>)}
       </div>
 
-      <div className="row lesson-actions">
-        <button type="button" className="btn" onClick={onGoExercise}>Aller aux exercices</button>
+      <div className="row lesson-actions single">
         <button type="button" className="btn secondary" onClick={done ? onUndo : onComplete}>
           {done ? "Annuler la validation" : "Terminer la leçon"}
         </button>
