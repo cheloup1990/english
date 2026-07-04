@@ -5,7 +5,7 @@ import { Home, PenLine, BookOpen, User } from "lucide-react";
 import { CARDS, THEMES, generateExercises, QUALITY_REPORT, normalize, LESSONS, CHAPTERS } from "./data";
 import "./styles.css";
 
-const KEY = "better-english-v10-5b";
+const KEY = "better-english-v10-5c";
 
 const defaultState = {
   name: "Jeremy",
@@ -493,8 +493,8 @@ function App() {
         <section className="screen active">
           <div className="hero-card">
             <div className="hero-inner">
-              <div className="hero-label">V10.5b.5a.5.4.3a</div>
-              <h2 className="hero-title">Prononciation + base propre</h2>
+              <div className="hero-label">V10.5cc.5a.5.4.3a</div>
+              <h2 className="hero-title">Quiz lettres</h2>
               <p className="hero-sub">Better English apprend l’anglais qu’on rencontre dans la vraie vie, pas l’anglais des manuels scolaires.</p>
               <div className="progress"><span style={{ width: `${state.xp % 100}%` }} /></div>
               <button className="btn full" onClick={() => setTab("exercise")}>Continuer</button>
@@ -716,21 +716,142 @@ function speakEnglish(text) {
   }
 }
 
+
+function shuffleArray(list) {
+  const arr = [...list];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function makeLetterOptions(correct, letters) {
+  const others = letters.filter((l) => l.letter !== correct.letter);
+  return shuffleArray([correct, ...shuffleArray(others).slice(0, 3)]).map((l) => l.letter);
+}
+
 function LetterSoundGrid({ letters }) {
-  if (!letters?.length) return null;
+  const [quiz, setQuiz] = React.useState(null);
+
+  function startQuiz() {
+    const cycle = shuffleArray(letters);
+    const current = cycle[0];
+    setQuiz({
+      cycle,
+      index: 0,
+      current,
+      options: makeLetterOptions(current, letters),
+      selected: "",
+      feedback: "",
+      completedCycles: 0
+    });
+    setTimeout(() => speakEnglish(current.speech || current.letter), 150);
+  }
+
+  function nextQuestion() {
+    setQuiz((q) => {
+      if (!q) return q;
+      const nextIndex = q.index + 1;
+
+      if (nextIndex >= q.cycle.length) {
+        const newCycle = shuffleArray(letters);
+        const current = newCycle[0];
+        setTimeout(() => speakEnglish(current.speech || current.letter), 150);
+        return {
+          cycle: newCycle,
+          index: 0,
+          current,
+          options: makeLetterOptions(current, letters),
+          selected: "",
+          feedback: "Cycle terminé. Nouveau mélange lancé.",
+          completedCycles: q.completedCycles + 1
+        };
+      }
+
+      const current = q.cycle[nextIndex];
+      setTimeout(() => speakEnglish(current.speech || current.letter), 150);
+      return {
+        ...q,
+        index: nextIndex,
+        current,
+        options: makeLetterOptions(current, letters),
+        selected: "",
+        feedback: ""
+      };
+    });
+  }
+
+  function choose(letter) {
+    setQuiz((q) => {
+      if (!q) return q;
+      const good = letter === q.current.letter;
+      return {
+        ...q,
+        selected: letter,
+        feedback: good ? "Correct." : `À revoir. C'était la lettre ${q.current.letter}.`
+      };
+    });
+  }
+
   return (
-    <div className="letter-sound-grid">
-      {letters.map((item) => (
-        <div className="letter-sound-card" key={item.letter}>
-          <strong>{item.letter}</strong>
-          <code>{item.ipa}</code>
-          <button onClick={() => speakEnglish(item.speech || item.letter)}>Écouter</button>
+    <div className="letter-lesson">
+      <div className="letter-sound-grid">
+        {letters.map((item) => (
+          <div className="letter-sound-card" key={item.letter}>
+            <strong>{item.letter}</strong>
+            <button type="button" onClick={() => speakEnglish(item.speech || item.letter)}>Écouter</button>
+          </div>
+        ))}
+      </div>
+
+      <div className="letter-quiz-card">
+        <div className="section-title">
+          <h3>Quiz d'écoute</h3>
+          <span className="tag">{quiz ? `${quiz.index + 1}/26` : "Prêt"}</span>
         </div>
-      ))}
+
+        {!quiz ? (
+          <>
+            <p className="muted">Écoute une lettre, choisis la bonne réponse. Chaque lettre passe une seule fois avant de recommencer dans un nouvel ordre.</p>
+            <button type="button" className="btn full" onClick={startQuiz}>Commencer le quiz</button>
+          </>
+        ) : (
+          <>
+            <p className="muted">Quelle lettre viens-tu d'entendre ?</p>
+            <button type="button" className="btn full replay-btn" onClick={() => speakEnglish(quiz.current.speech || quiz.current.letter)}>Réécouter</button>
+
+            <div className="letter-options">
+              {quiz.options.map((option) => (
+                <button
+                  type="button"
+                  key={option}
+                  className={`letter-option ${quiz.selected === option ? (option === quiz.current.letter ? "good" : "bad") : ""}`}
+                  onClick={() => choose(option)}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+
+            {quiz.feedback && <p className={`letter-feedback ${quiz.feedback === "Correct." ? "good" : "soft"}`}>{quiz.feedback}</p>}
+
+            <button
+              type="button"
+              className="btn full"
+              onClick={nextQuestion}
+              disabled={!quiz.selected}
+            >
+              {quiz.index + 1 >= quiz.cycle.length ? "Nouveau cycle" : "Lettre suivante"}
+            </button>
+
+            <p className="muted cycle-note">Cycles terminés : {quiz.completedCycles}</p>
+          </>
+        )}
+      </div>
     </div>
   );
 }
-
 
 function ChapterBlock({ chapter, lessons, completed, tests, onTrain, onComplete, onTest }) {
   const [openChapter, setOpenChapter] = React.useState(Boolean(chapter.unlocked));

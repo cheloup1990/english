@@ -27503,7 +27503,7 @@ export const LESSONS = [
     "title": "Prononciation des lettres",
     "duration": "6 min",
     "targetExercises": 15,
-    "objective": "Savoir prononcer les lettres anglaises et comprendre leur écriture IPA.",
+    "objective": "Écouter les lettres anglaises et apprendre à les reconnaître.",
     "sections": [
       {
         "title": "À quoi ça sert ?",
@@ -27511,17 +27511,17 @@ export const LESSONS = [
       },
       {
         "title": "Comment utiliser cette leçon ?",
-        "body": "Regarde la lettre, écoute le son, puis lis la transcription IPA à côté. L'IPA montre la prononciation exacte."
+        "body": "Écoute les lettres une par une, puis lance le quiz. Dans le quiz, chaque lettre passe une seule fois par cycle."
       },
       {
-        "title": "À retenir",
-        "body": "Certaines lettres trompent souvent les francophones : A se prononce /eɪ/, E se prononce /iː/, I se prononce /aɪ/, et W se prononce /ˈdʌbəl.juː/."
+        "title": "Règle du quiz",
+        "body": "Les 26 lettres sont mélangées. Une lettre réussie disparaît du cycle. Quand les 26 sont terminées, un nouveau cycle recommence dans un nouvel ordre."
       }
     ],
     "summary": [
       "Le bouton Écouter prononce la lettre en anglais.",
-      "L'IPA indique la prononciation exacte.",
-      "Cette leçon sert surtout à épeler correctement."
+      "Le quiz fait passer les 26 lettres sans répétition.",
+      "Tu peux réécouter autant de fois que tu veux."
     ],
     "train": {
       "type": "mix",
@@ -27534,132 +27534,106 @@ export const LESSONS = [
     "letterSounds": [
       {
         "letter": "A",
-        "ipa": "/eɪ/",
         "speech": "ay"
       },
       {
         "letter": "B",
-        "ipa": "/biː/",
         "speech": "bee"
       },
       {
         "letter": "C",
-        "ipa": "/siː/",
         "speech": "see"
       },
       {
         "letter": "D",
-        "ipa": "/diː/",
         "speech": "dee"
       },
       {
         "letter": "E",
-        "ipa": "/iː/",
         "speech": "ee"
       },
       {
         "letter": "F",
-        "ipa": "/ɛf/",
         "speech": "eff"
       },
       {
         "letter": "G",
-        "ipa": "/dʒiː/",
         "speech": "gee"
       },
       {
         "letter": "H",
-        "ipa": "/eɪtʃ/",
         "speech": "aitch"
       },
       {
         "letter": "I",
-        "ipa": "/aɪ/",
         "speech": "eye"
       },
       {
         "letter": "J",
-        "ipa": "/dʒeɪ/",
         "speech": "jay"
       },
       {
         "letter": "K",
-        "ipa": "/keɪ/",
         "speech": "kay"
       },
       {
         "letter": "L",
-        "ipa": "/ɛl/",
         "speech": "el"
       },
       {
         "letter": "M",
-        "ipa": "/ɛm/",
         "speech": "em"
       },
       {
         "letter": "N",
-        "ipa": "/ɛn/",
         "speech": "en"
       },
       {
         "letter": "O",
-        "ipa": "/oʊ/",
         "speech": "oh"
       },
       {
         "letter": "P",
-        "ipa": "/piː/",
         "speech": "pee"
       },
       {
         "letter": "Q",
-        "ipa": "/kjuː/",
         "speech": "cue"
       },
       {
         "letter": "R",
-        "ipa": "/ɑːr/",
         "speech": "are"
       },
       {
         "letter": "S",
-        "ipa": "/ɛs/",
         "speech": "ess"
       },
       {
         "letter": "T",
-        "ipa": "/tiː/",
         "speech": "tee"
       },
       {
         "letter": "U",
-        "ipa": "/juː/",
         "speech": "you"
       },
       {
         "letter": "V",
-        "ipa": "/viː/",
         "speech": "vee"
       },
       {
         "letter": "W",
-        "ipa": "/ˈdʌbəl.juː/",
         "speech": "double you"
       },
       {
         "letter": "X",
-        "ipa": "/ɛks/",
         "speech": "ex"
       },
       {
         "letter": "Y",
-        "ipa": "/waɪ/",
         "speech": "why"
       },
       {
         "letter": "Z",
-        "ipa": "/ziː/",
         "speech": "zee"
       }
     ]
