@@ -5,7 +5,7 @@ import { Home, PenLine, BookOpen, User } from "lucide-react";
 import { CARDS, THEMES, generateExercises, QUALITY_REPORT, normalize, LESSONS, CHAPTERS } from "./data";
 import "./styles.css";
 
-const KEY = "better-english-v10-5j";
+const KEY = "better-english-v10-6";
 
 const defaultState = {
   name: "Jeremy",
@@ -497,8 +497,8 @@ function App() {
         <section className="screen active">
           <div className="hero-card">
             <div className="hero-inner">
-              <div className="hero-label">V10.5JHGdc.5a.5.4.3a</div>
-              <h2 className="hero-title">V10.5JH</h2>
+              <div className="hero-label">V10.6HGdc.5a.5.4.3a</div>
+              <h2 className="hero-title">V10.6H</h2>
               <p className="hero-sub">Better English apprend l’anglais qu’on rencontre dans la vraie vie, pas l’anglais des manuels scolaires.</p>
               <div className="progress"><span style={{ width: `${state.xp % 100}%` }} /></div>
               <button className="btn full" onClick={() => setTab("exercise")}>Continuer</button>
@@ -644,9 +644,6 @@ function App() {
               lessons={LESSONS.filter((l) => l.chapterId === chapter.id)}
               completed={state.completedLessons || {}}
               tests={state.chapterTests || {}}
-              onGoExercise={() => {
-                setTab("exercise");
-              }}
               onCompleteLesson={(lesson) => {
                 setState((s) => ({
                   ...s,
@@ -707,37 +704,26 @@ function Filter({ title, label, id, open, setOpen, children }) {
 
 
 
+
 function speakEnglish(text) {
   try {
     if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
 
-    const speakNow = () => {
-      window.speechSynthesis.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(String(text || ""));
-      utterance.lang = "en-US";
-      utterance.rate = 0.72;
-      utterance.pitch = 1;
-
-      const voices = window.speechSynthesis.getVoices?.() || [];
-      const englishVoice =
-        voices.find(v => v.lang === "en-US") ||
-        voices.find(v => v.lang === "en-GB") ||
-        voices.find(v => String(v.lang || "").toLowerCase().startsWith("en")) ||
-        null;
-
-      if (englishVoice) utterance.voice = englishVoice;
-
-      window.speechSynthesis.speak(utterance);
-    };
+    const utterance = new SpeechSynthesisUtterance(String(text || ""));
+    utterance.lang = "en-US";
+    utterance.rate = 0.72;
+    utterance.pitch = 1;
 
     const voices = window.speechSynthesis.getVoices?.() || [];
-    if (voices.length === 0 && "onvoiceschanged" in window.speechSynthesis) {
-      window.speechSynthesis.onvoiceschanged = speakNow;
-      setTimeout(speakNow, 250);
-    } else {
-      speakNow();
-    }
+    const englishVoice =
+      voices.find(v => v.lang === "en-US") ||
+      voices.find(v => v.lang === "en-GB") ||
+      voices.find(v => String(v.lang || "").toLowerCase().startsWith("en")) ||
+      null;
+
+    if (englishVoice) utterance.voice = englishVoice;
+    window.speechSynthesis.speak(utterance);
   } catch (e) {
     console.warn("Speech synthesis unavailable", e);
   }
@@ -775,7 +761,6 @@ function makeLetterOptions(correct, letters) {
     options.push(item.letter);
   }
 
-  // Fallback, normally unused, in case a future alphabet list is too small.
   for (const item of shuffled) {
     if (options.length >= 4) break;
     if (!options.includes(item.letter)) options.push(item.letter);
@@ -848,6 +833,7 @@ function ChapterBlock({ chapter, lessons, completed, tests, onGoExercise, onComp
 
 function LessonAccordionContent({ lesson, done, onComplete, onUndo }) {
   const isLetterLesson = lesson.interactiveType === "letter_pronunciation" || lesson.letterSounds?.length;
+  const isQcmLesson = lesson.interactiveType === "qcm_lesson" || lesson.questionBank?.length;
 
   return (
     <div className="lesson-accordion-body">
@@ -859,6 +845,7 @@ function LessonAccordionContent({ lesson, done, onComplete, onUndo }) {
       ))}
 
       {isLetterLesson && <LetterPronunciationLesson letters={lesson.letterSounds || []} />}
+      {isQcmLesson && <LessonQcmQuiz bank={lesson.questionBank || []} size={lesson.quizSize || 20} />}
 
       <div className="lesson-summary">
         <h3>Résumé</h3>
@@ -901,11 +888,7 @@ function LetterPronunciationLesson({ letters }) {
     setQuiz((q) => {
       if (!q || !q.selected) return q;
       const good = q.selected === q.current.letter;
-      return {
-        ...q,
-        checked: true,
-        feedback: good ? "Correct." : `Raté. La bonne réponse était ${q.current.letter}.`
-      };
+      return { ...q, checked: true, feedback: good ? "Correct." : `Raté. La bonne réponse était ${q.current.letter}.` };
     });
   }
 
@@ -918,29 +901,12 @@ function LetterPronunciationLesson({ letters }) {
         const newCycle = shuffleArray(letters);
         const current = newCycle[0];
         setTimeout(() => speakEnglish(current.audioText || current.speech || current.letter), 150);
-        return {
-          cycle: newCycle,
-          index: 0,
-          current,
-          options: makeLetterOptions(current, letters),
-          selected: "",
-          checked: false,
-          feedback: "Cycle terminé. Nouveau mélange lancé.",
-          completedCycles: q.completedCycles + 1
-        };
+        return { cycle: newCycle, index: 0, current, options: makeLetterOptions(current, letters), selected: "", checked: false, feedback: "Cycle terminé. Nouveau mélange lancé.", completedCycles: q.completedCycles + 1 };
       }
 
       const current = q.cycle[nextIndex];
       setTimeout(() => speakEnglish(current.audioText || current.speech || current.letter), 150);
-      return {
-        ...q,
-        index: nextIndex,
-        current,
-        options: makeLetterOptions(current, letters),
-        selected: "",
-        checked: false,
-        feedback: ""
-      };
+      return { ...q, index: nextIndex, current, options: makeLetterOptions(current, letters), selected: "", checked: false, feedback: "" };
     });
   }
 
@@ -977,12 +943,7 @@ function LetterPronunciationLesson({ letters }) {
                 const isGood = quiz.checked && option === quiz.current.letter;
                 const isBad = quiz.checked && selected && option !== quiz.current.letter;
                 return (
-                  <button
-                    type="button"
-                    key={option}
-                    className={`letter-option ${selected ? "selected" : ""} ${isGood ? "good" : ""} ${isBad ? "bad" : ""}`}
-                    onClick={() => selectOption(option)}
-                  >
+                  <button type="button" key={option} className={`letter-option ${selected ? "selected" : ""} ${isGood ? "good" : ""} ${isBad ? "bad" : ""}`} onClick={() => selectOption(option)}>
                     {option}
                   </button>
                 );
@@ -994,15 +955,109 @@ function LetterPronunciationLesson({ letters }) {
             {!quiz.checked ? (
               <button type="button" className="btn full" onClick={validateAnswer} disabled={!quiz.selected}>Valider</button>
             ) : (
-              <button type="button" className="btn full" onClick={nextQuestion}>
-                {quiz.index + 1 >= quiz.cycle.length ? "Nouveau cycle" : "Lettre suivante"}
-              </button>
+              <button type="button" className="btn full" onClick={nextQuestion}>{quiz.index + 1 >= quiz.cycle.length ? "Nouveau cycle" : "Lettre suivante"}</button>
             )}
 
             <p className="muted cycle-note">Cycles terminés : {quiz.completedCycles}</p>
           </>
         )}
       </div>
+    </div>
+  );
+}
+
+function LessonQcmQuiz({ bank, size = 20 }) {
+  const [quiz, setQuiz] = React.useState(null);
+
+  function startQuiz() {
+    const questions = shuffleArray(bank).slice(0, Math.min(size, bank.length)).map((q) => ({ ...q, options: shuffleArray(q.options || []) }));
+    setQuiz({ questions, index: 0, selected: "", checked: false, answers: [], finished: false });
+  }
+
+  function select(option) {
+    setQuiz((q) => q && !q.checked ? { ...q, selected: option } : q);
+  }
+
+  function validate() {
+    setQuiz((q) => {
+      if (!q || !q.selected) return q;
+      const current = q.questions[q.index];
+      const good = q.selected === current.answer;
+      return { ...q, checked: true, answers: [...q.answers, { id: current.id, good, selected: q.selected }] };
+    });
+  }
+
+  function next() {
+    setQuiz((q) => {
+      if (!q || !q.checked) return q;
+      const nextIndex = q.index + 1;
+      if (nextIndex >= q.questions.length) {
+        return { ...q, finished: true };
+      }
+      return { ...q, index: nextIndex, selected: "", checked: false };
+    });
+  }
+
+  if (!bank?.length) return null;
+
+  if (!quiz) {
+    return (
+      <div className="lesson-qcm-card">
+        <div className="section-title"><h3>Quiz de la leçon</h3><span className="tag">20 questions</span></div>
+        <p className="muted">20 questions aléatoires parmi 40. Aucun doublon dans un même quiz.</p>
+        <button type="button" className="btn full" onClick={startQuiz}>Commencer le quiz</button>
+      </div>
+    );
+  }
+
+  if (quiz.finished) {
+    const score = quiz.answers.filter(a => a.good).length;
+    const pct = Math.round((score / quiz.questions.length) * 100);
+    const stars = pct >= 90 ? 3 : pct >= 75 ? 2 : pct >= 60 ? 1 : 0;
+    return (
+      <div className="lesson-qcm-card">
+        <div className="section-title"><h3>Résultat du quiz</h3><span className="tag">{pct}%</span></div>
+        <h3 className="qcm-result">{score}/{quiz.questions.length}</h3>
+        <p className="test-stars">{stars}/3 étoiles</p>
+        <button type="button" className="btn full" onClick={startQuiz}>Recommencer</button>
+      </div>
+    );
+  }
+
+  const current = quiz.questions[quiz.index];
+  const correct = quiz.checked && quiz.selected === current.answer;
+  const wrong = quiz.checked && quiz.selected !== current.answer;
+
+  return (
+    <div className="lesson-qcm-card">
+      <div className="section-title"><h3>Quiz de la leçon</h3><span className="tag">{quiz.index + 1}/{quiz.questions.length}</span></div>
+      <h3 className="lesson-qcm-question">{current.prompt}</h3>
+
+      <div className="lesson-qcm-options">
+        {current.options.map((option) => {
+          const selected = quiz.selected === option;
+          const isGood = quiz.checked && option === current.answer;
+          const isBad = quiz.checked && selected && option !== current.answer;
+          return (
+            <button type="button" key={option} className={`lesson-qcm-option ${selected ? "selected" : ""} ${isGood ? "good" : ""} ${isBad ? "bad" : ""}`} onClick={() => select(option)}>
+              {option}
+            </button>
+          );
+        })}
+      </div>
+
+      {quiz.checked && (
+        <div className={`lesson-qcm-feedback ${correct ? "good" : "bad"}`}>
+          <b>{correct ? "Correct." : `Raté. La bonne réponse était : ${current.answer}.`}</b>
+          {current.explain && <p>{current.explain}</p>}
+        </div>
+      )}
+
+      {!quiz.checked ? (
+        <button type="button" className="btn full" onClick={validate} disabled={!quiz.selected}>Valider</button>
+      ) : (
+        <button type="button" className="btn full" onClick={next}>{quiz.index + 1 >= quiz.questions.length ? "Voir le résultat" : "Question suivante"}</button>
+      )}
     </div>
   );
 }

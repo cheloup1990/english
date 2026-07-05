@@ -27534,8 +27534,8 @@ export const LESSONS = [
     "letterSounds": [
       {
         "letter": "A",
-        "speech": "ay",
-        "audioText": "ay"
+        "speech": "A",
+        "audioText": "A"
       },
       {
         "letter": "B",
@@ -27671,13 +27671,13 @@ export const LESSONS = [
     "level": "A1",
     "order": 2,
     "title": "Les pronoms",
-    "duration": "5 min",
+    "duration": "7 min",
     "targetExercises": 20,
-    "objective": "Comprendre I, you, he, she, it, we et they.",
+    "objective": "Comprendre et utiliser I, you, he, she, it, we et they.",
     "sections": [
       {
         "title": "Les pronoms essentiels",
-        "body": "I = je\nYou = tu / vous\nHe = il\nShe = elle\nIt = il/elle pour une chose, un animal ou une idée\nWe = nous\nThey = ils/elles"
+        "body": "I = je\nYou = tu / vous\nHe = il\nShe = elle\nIt = il / elle pour une chose, un animal, la météo ou une idée\nWe = nous\nThey = ils / elles"
       },
       {
         "title": "Exemples",
@@ -27689,13 +27689,15 @@ export const LESSONS = [
       },
       {
         "title": "Erreurs fréquentes",
-        "body": "Ne dis pas he pour une femme. Utilise she.\nPour un objet ou une idée, utilise it."
+        "body": "Ne dis pas he pour une femme : utilise she.\nPour un objet ou une idée, utilise it.\nPour plusieurs personnes ou plusieurs choses, utilise they."
       }
     ],
     "summary": [
       "I = je.",
       "You peut vouloir dire tu ou vous.",
-      "It sert pour les choses, la météo et les idées."
+      "He = il, She = elle.",
+      "It sert pour les choses, la météo, les animaux et les idées.",
+      "We = nous, They = ils / elles."
     ],
     "train": {
       "type": "translate",
@@ -27704,7 +27706,491 @@ export const LESSONS = [
       ],
       "direction": "mix",
       "difficulty": "all"
-    }
+    },
+    "interactiveType": "qcm_lesson",
+    "quizSize": 20,
+    "questionBank": [
+      {
+        "id": "pron_001",
+        "prompt": "Traduis « je » en anglais.",
+        "options": [
+          "I",
+          "You",
+          "He",
+          "We"
+        ],
+        "answer": "I",
+        "explain": "I signifie je."
+      },
+      {
+        "id": "pron_002",
+        "prompt": "Traduis « tu / vous » en anglais.",
+        "options": [
+          "You",
+          "We",
+          "They",
+          "It"
+        ],
+        "answer": "You",
+        "explain": "You peut vouloir dire tu ou vous."
+      },
+      {
+        "id": "pron_003",
+        "prompt": "Traduis « il » pour un homme.",
+        "options": [
+          "He",
+          "She",
+          "It",
+          "They"
+        ],
+        "answer": "He",
+        "explain": "He désigne un homme ou un garçon."
+      },
+      {
+        "id": "pron_004",
+        "prompt": "Traduis « elle » pour une femme.",
+        "options": [
+          "She",
+          "He",
+          "It",
+          "We"
+        ],
+        "answer": "She",
+        "explain": "She désigne une femme ou une fille."
+      },
+      {
+        "id": "pron_005",
+        "prompt": "Traduis « nous » en anglais.",
+        "options": [
+          "We",
+          "They",
+          "You",
+          "I"
+        ],
+        "answer": "We",
+        "explain": "We signifie nous."
+      },
+      {
+        "id": "pron_006",
+        "prompt": "Traduis « ils / elles » en anglais.",
+        "options": [
+          "They",
+          "We",
+          "You",
+          "It"
+        ],
+        "answer": "They",
+        "explain": "They peut désigner ils ou elles."
+      },
+      {
+        "id": "pron_007",
+        "prompt": "Quel pronom utilise-t-on pour une voiture ?",
+        "options": [
+          "It",
+          "He",
+          "She",
+          "We"
+        ],
+        "answer": "It",
+        "explain": "Pour une chose, on utilise it."
+      },
+      {
+        "id": "pron_008",
+        "prompt": "Quel pronom utilise-t-on pour la météo ?",
+        "options": [
+          "It",
+          "She",
+          "He",
+          "They"
+        ],
+        "answer": "It",
+        "explain": "En anglais, on utilise it pour la météo : It is raining."
+      },
+      {
+        "id": "pron_009",
+        "prompt": "Complète : ___ am ready.",
+        "options": [
+          "I",
+          "You",
+          "He",
+          "They"
+        ],
+        "answer": "I",
+        "explain": "Avec I, on dit I am."
+      },
+      {
+        "id": "pron_010",
+        "prompt": "Complète : ___ is my sister.",
+        "options": [
+          "She",
+          "He",
+          "It",
+          "They"
+        ],
+        "answer": "She",
+        "explain": "Sister désigne une fille ou une femme : she."
+      },
+      {
+        "id": "pron_011",
+        "prompt": "Complète : ___ is my brother.",
+        "options": [
+          "He",
+          "She",
+          "It",
+          "We"
+        ],
+        "answer": "He",
+        "explain": "Brother désigne un garçon ou un homme : he."
+      },
+      {
+        "id": "pron_012",
+        "prompt": "Complète : ___ are at home.",
+        "options": [
+          "They",
+          "He",
+          "She",
+          "It"
+        ],
+        "answer": "They",
+        "explain": "They va avec are."
+      },
+      {
+        "id": "pron_013",
+        "prompt": "Complète : ___ are friends.",
+        "options": [
+          "We",
+          "I",
+          "He",
+          "It"
+        ],
+        "answer": "We",
+        "explain": "We peut être suivi de are."
+      },
+      {
+        "id": "pron_014",
+        "prompt": "Complète : ___ is on the table.",
+        "options": [
+          "It",
+          "He",
+          "She",
+          "They"
+        ],
+        "answer": "It",
+        "explain": "Pour un objet sur une table, on utilise it."
+      },
+      {
+        "id": "pron_015",
+        "prompt": "Complète : ___ is raining.",
+        "options": [
+          "It",
+          "He",
+          "She",
+          "We"
+        ],
+        "answer": "It",
+        "explain": "Pour la météo, on utilise it."
+      },
+      {
+        "id": "pron_016",
+        "prompt": "Complète : ___ are my parents.",
+        "options": [
+          "They",
+          "It",
+          "He",
+          "She"
+        ],
+        "answer": "They",
+        "explain": "Parents est pluriel : they."
+      },
+      {
+        "id": "pron_017",
+        "prompt": "Quel pronom remplace « my phone » ?",
+        "options": [
+          "It",
+          "He",
+          "She",
+          "They"
+        ],
+        "answer": "It",
+        "explain": "Un téléphone est une chose : it."
+      },
+      {
+        "id": "pron_018",
+        "prompt": "Quel pronom remplace « my mother » ?",
+        "options": [
+          "She",
+          "He",
+          "It",
+          "They"
+        ],
+        "answer": "She",
+        "explain": "Mother désigne une femme : she."
+      },
+      {
+        "id": "pron_019",
+        "prompt": "Quel pronom remplace « my father » ?",
+        "options": [
+          "He",
+          "She",
+          "It",
+          "We"
+        ],
+        "answer": "He",
+        "explain": "Father désigne un homme : he."
+      },
+      {
+        "id": "pron_020",
+        "prompt": "Quel pronom remplace « my friends » ?",
+        "options": [
+          "They",
+          "We",
+          "You",
+          "It"
+        ],
+        "answer": "They",
+        "explain": "Friends est pluriel : they."
+      },
+      {
+        "id": "pron_021",
+        "prompt": "Quel pronom remplace « Sarah » ?",
+        "options": [
+          "She",
+          "He",
+          "It",
+          "They"
+        ],
+        "answer": "She",
+        "explain": "Sarah est un prénom féminin : she."
+      },
+      {
+        "id": "pron_022",
+        "prompt": "Quel pronom remplace « Tom » ?",
+        "options": [
+          "He",
+          "She",
+          "It",
+          "We"
+        ],
+        "answer": "He",
+        "explain": "Tom est un prénom masculin : he."
+      },
+      {
+        "id": "pron_023",
+        "prompt": "Quel pronom remplace « the dog » si on ne précise pas le sexe ?",
+        "options": [
+          "It",
+          "He",
+          "She",
+          "We"
+        ],
+        "answer": "It",
+        "explain": "Pour un animal sans précision, on peut utiliser it."
+      },
+      {
+        "id": "pron_024",
+        "prompt": "Quel pronom remplace « the idea » ?",
+        "options": [
+          "It",
+          "She",
+          "He",
+          "They"
+        ],
+        "answer": "It",
+        "explain": "Une idée se remplace par it."
+      },
+      {
+        "id": "pron_025",
+        "prompt": "Choisis la phrase correcte.",
+        "options": [
+          "She is my teacher.",
+          "He is my teacher.",
+          "It is my teacher.",
+          "They is my teacher."
+        ],
+        "answer": "She is my teacher.",
+        "explain": "Pour une enseignante, she est correct."
+      },
+      {
+        "id": "pron_026",
+        "prompt": "Choisis la phrase correcte.",
+        "options": [
+          "He is my uncle.",
+          "She is my uncle.",
+          "It is my uncle.",
+          "They is my uncle."
+        ],
+        "answer": "He is my uncle.",
+        "explain": "Uncle désigne un homme : he."
+      },
+      {
+        "id": "pron_027",
+        "prompt": "Choisis la phrase correcte pour un objet.",
+        "options": [
+          "It is new.",
+          "He is new.",
+          "She is new.",
+          "We is new."
+        ],
+        "answer": "It is new.",
+        "explain": "Pour un objet, on utilise it."
+      },
+      {
+        "id": "pron_028",
+        "prompt": "Choisis la phrase correcte pour deux amis.",
+        "options": [
+          "They are nice.",
+          "He are nice.",
+          "She are nice.",
+          "It are nice."
+        ],
+        "answer": "They are nice.",
+        "explain": "Deux amis = they."
+      },
+      {
+        "id": "pron_029",
+        "prompt": "Que signifie « I » ?",
+        "options": [
+          "je",
+          "tu",
+          "nous",
+          "ils"
+        ],
+        "answer": "je",
+        "explain": "I signifie je."
+      },
+      {
+        "id": "pron_030",
+        "prompt": "Que signifie « she » ?",
+        "options": [
+          "elle",
+          "il",
+          "nous",
+          "cela"
+        ],
+        "answer": "elle",
+        "explain": "She signifie elle."
+      },
+      {
+        "id": "pron_031",
+        "prompt": "Que signifie « he » ?",
+        "options": [
+          "il",
+          "elle",
+          "nous",
+          "ils"
+        ],
+        "answer": "il",
+        "explain": "He signifie il."
+      },
+      {
+        "id": "pron_032",
+        "prompt": "Que signifie « it » ?",
+        "options": [
+          "il / elle pour une chose",
+          "nous",
+          "ils / elles",
+          "tu / vous"
+        ],
+        "answer": "il / elle pour une chose",
+        "explain": "It sert pour les choses, idées, météo ou animaux non précisés."
+      },
+      {
+        "id": "pron_033",
+        "prompt": "Que signifie « we » ?",
+        "options": [
+          "nous",
+          "ils",
+          "je",
+          "tu"
+        ],
+        "answer": "nous",
+        "explain": "We signifie nous."
+      },
+      {
+        "id": "pron_034",
+        "prompt": "Que signifie « they » ?",
+        "options": [
+          "ils / elles",
+          "nous",
+          "tu / vous",
+          "cela"
+        ],
+        "answer": "ils / elles",
+        "explain": "They signifie ils ou elles."
+      },
+      {
+        "id": "pron_035",
+        "prompt": "Dans « You are ready », you signifie :",
+        "options": [
+          "tu / vous",
+          "je",
+          "nous",
+          "ils"
+        ],
+        "answer": "tu / vous",
+        "explain": "You peut être singulier ou pluriel."
+      },
+      {
+        "id": "pron_036",
+        "prompt": "Dans « It is cold », it sert pour :",
+        "options": [
+          "la météo",
+          "une femme",
+          "un homme",
+          "plusieurs personnes"
+        ],
+        "answer": "la météo",
+        "explain": "It est utilisé pour parler de la météo."
+      },
+      {
+        "id": "pron_037",
+        "prompt": "Quelle phrase utilise le bon pronom pour « my computer » ?",
+        "options": [
+          "It is slow.",
+          "He is slow.",
+          "She is slow.",
+          "They is slow."
+        ],
+        "answer": "It is slow.",
+        "explain": "Un ordinateur est une chose : it."
+      },
+      {
+        "id": "pron_038",
+        "prompt": "Quelle phrase utilise le bon pronom pour « my girlfriend » ?",
+        "options": [
+          "She is here.",
+          "He is here.",
+          "It is here.",
+          "They is here."
+        ],
+        "answer": "She is here.",
+        "explain": "Girlfriend désigne une femme : she."
+      },
+      {
+        "id": "pron_039",
+        "prompt": "Quelle phrase utilise le bon pronom pour « my team and I » ?",
+        "options": [
+          "We are ready.",
+          "They are ready.",
+          "You are ready.",
+          "It is ready."
+        ],
+        "answer": "We are ready.",
+        "explain": "My team and I = nous = we."
+      },
+      {
+        "id": "pron_040",
+        "prompt": "Quelle phrase utilise le bon pronom pour « the children » ?",
+        "options": [
+          "They are outside.",
+          "It is outside.",
+          "He is outside.",
+          "She is outside."
+        ],
+        "answer": "They are outside.",
+        "explain": "Children est pluriel : they."
+      }
+    ]
   },
   {
     "id": "a1_ch1_to_be",

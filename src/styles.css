@@ -1044,3 +1044,80 @@ body{
 .lesson-player-head{
   display:none!important;
 }
+
+/* --- V10.6 lesson QCM system --- */
+.lesson-qcm-card{
+  margin-top:14px;
+  padding:15px;
+  border-radius:24px;
+  background:linear-gradient(145deg,#FFFFFF,#F8F4FF);
+  border:2px solid #B7A2FF;
+  box-shadow:0 14px 34px rgba(109,74,255,.12);
+}
+.lesson-qcm-card .section-title h3{
+  color:#6D4AFF!important;
+  font-weight:800!important;
+}
+.lesson-qcm-question{
+  color:#2F2A3D;
+  font-size:20px;
+  line-height:1.4;
+  margin:14px 0;
+}
+.lesson-qcm-options{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+  margin:14px 0;
+}
+.lesson-qcm-option{
+  border:2px solid #E3DAFF;
+  border-radius:18px;
+  padding:14px;
+  background:#fff;
+  color:#2F2A3D;
+  font-size:16px;
+  font-weight:800;
+  text-align:left;
+  cursor:pointer;
+  box-shadow:0 8px 18px rgba(109,74,255,.06);
+}
+.lesson-qcm-option.selected{
+  background:#fff!important;
+  border-color:#7C5CFF!important;
+  box-shadow:0 0 0 3px rgba(124,92,255,.14),0 10px 24px rgba(109,74,255,.10)!important;
+}
+.lesson-qcm-option.good{
+  background:#F4FFF8!important;
+  border-color:#55C983!important;
+}
+.lesson-qcm-option.bad{
+  background:#FFF7F8!important;
+  border-color:#E96A82!important;
+}
+.lesson-qcm-feedback{
+  margin:12px 0;
+  padding:12px;
+  border-radius:18px;
+  font-weight:700;
+}
+.lesson-qcm-feedback.good{
+  background:#F4FFF8;
+  border:1px solid #9DE7B9;
+  color:#167A3D;
+}
+.lesson-qcm-feedback.bad{
+  background:#FFF7F8;
+  border:1px solid #F1A6B5;
+  color:#B4233B;
+}
+.lesson-qcm-feedback p{
+  margin:6px 0 0;
+  color:#5F5674;
+  line-height:1.5;
+}
+.qcm-result{
+  font-size:30px;
+  margin:10px 0;
+  color:#2F2A3D;
+}
