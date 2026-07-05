@@ -6,12 +6,13 @@ import { CARDS, THEMES, generateExercises, QUALITY_REPORT, normalize, LESSONS, C
 import "./styles.css";
 import { supabase, hasSupabaseConfig } from "./lib/supabase";
 
-const KEY = "better-english-v10-8e";
+const KEY = "better-english-v10-8f";
 
 const defaultState = {
   name: "Jeremy",
   xp: 0,
   streak: 0,
+  bestStreak: 0,
   done: 0,
   correct: 0,
   soft: 0,
@@ -239,6 +240,52 @@ function App() {
   const [authError, setAuthError] = useState("");
   const [syncStatus, setSyncStatus] = useState("local");
   const [guestMode, setGuestMode] = useState(() => localStorage.getItem("better-english-entry") === "guest");
+
+  function isRemoteProgressEmpty(remoteData) {
+    if (!remoteData) return true;
+    const xp = Number(remoteData.xp || 0);
+    const done = Number(remoteData.done || 0);
+    const completedLessons = Object.keys(remoteData.completedLessons || {}).length;
+    const completedTests = Object.keys(remoteData.chapterTests || {}).length;
+    return xp === 0 && done === 0 && completedLessons === 0 && completedTests === 0;
+  }
+
+  function isLocalProgressEmpty(localData) {
+    if (!localData) return true;
+    const xp = Number(localData.xp || 0);
+    const done = Number(localData.done || 0);
+    const completedLessons = Object.keys(localData.completedLessons || {}).length;
+    const completedTests = Object.keys(localData.chapterTests || {}).length;
+    return xp === 0 && done === 0 && completedLessons === 0 && completedTests === 0;
+  }
+
+  function mergeProgress(localData, remoteData) {
+    if (!remoteData) return localData;
+    if (!localData) return remoteData;
+
+    return {
+      ...localData,
+      ...remoteData,
+      xp: Math.max(Number(localData.xp || 0), Number(remoteData.xp || 0)),
+      done: Math.max(Number(localData.done || 0), Number(remoteData.done || 0)),
+      correct: Math.max(Number(localData.correct || 0), Number(remoteData.correct || 0)),
+      streak: Math.max(Number(localData.streak || 0), Number(remoteData.streak || 0)),
+      bestStreak: Math.max(
+        Number(localData.bestStreak || localData.streak || 0),
+        Number(remoteData.bestStreak || remoteData.streak || 0)
+      ),
+      completedLessons: {
+        ...(localData.completedLessons || {}),
+        ...(remoteData.completedLessons || {}),
+      },
+      chapterTests: {
+        ...(localData.chapterTests || {}),
+        ...(remoteData.chapterTests || {}),
+      },
+      mistakes: remoteData.mistakes?.length ? remoteData.mistakes : (localData.mistakes || []),
+    };
+  }
+
   const [filterOpen, setFilterOpen] = useState("theme");
   const [nameInput, setNameInput] = useState(state.name);
   const [navHidden, setNavHidden] = useState(false);
@@ -367,6 +414,8 @@ function App() {
     if (!supabase || !userId) return;
     setSyncStatus("loading");
 
+    const localSnapshot = state;
+
     const { data, error } = await supabase
       .from("progress")
       .select("*")
@@ -379,15 +428,39 @@ function App() {
       return;
     }
 
-    if (data?.data) {
-      setState((local) => ({ ...local, ...data.data }));
-    } else {
+    const remoteProgress = data?.data || null;
+    const remoteEmpty = isRemoteProgressEmpty(remoteProgress);
+    const localEmpty = isLocalProgressEmpty(localSnapshot);
+
+    if (remoteEmpty && !localEmpty) {
       await supabase.from("progress").upsert({
         user_id: userId,
-        data: state,
+        data: localSnapshot,
         updated_at: new Date().toISOString(),
       });
+      setSyncStatus("synced");
+      return;
     }
+
+    if (!remoteEmpty) {
+      const merged = mergeProgress(localSnapshot, remoteProgress);
+      setState((local) => mergeProgress(local, remoteProgress));
+
+      await supabase.from("progress").upsert({
+        user_id: userId,
+        data: merged,
+        updated_at: new Date().toISOString(),
+      });
+
+      setSyncStatus("synced");
+      return;
+    }
+
+    await supabase.from("progress").upsert({
+      user_id: userId,
+      data: localSnapshot,
+      updated_at: new Date().toISOString(),
+    });
 
     setSyncStatus("synced");
   }
@@ -462,7 +535,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!supabase || !session?.user || guestMode) return;
+    if (!supabase || !session?.user || guestMode || syncStatus === "loading") return;
 
     const timeout = setTimeout(async () => {
       setSyncStatus("saving");
