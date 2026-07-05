@@ -6,7 +6,7 @@ import { CARDS, THEMES, generateExercises, QUALITY_REPORT, normalize, LESSONS, C
 import "./styles.css";
 import { supabase, hasSupabaseConfig } from "./lib/supabase";
 
-const KEY = "better-english-v10-8d";
+const KEY = "better-english-v10-8e";
 
 const defaultState = {
   name: "Jeremy",
@@ -480,6 +480,43 @@ function App() {
   }, [state, session?.user?.id, guestMode]);
 
 
+
+  function formatLearningTime() {
+    const done = Number(state.done || 0);
+    const minutes = Math.max(0, Math.round(done * 1.5));
+    const hours = Math.floor(minutes / 60);
+    const rest = minutes % 60;
+    if (hours <= 0) return `${rest} min`;
+    return `${hours} h ${String(rest).padStart(2, "0")} min`;
+  }
+
+  function getCreatedDate() {
+    const rawDate = profile?.created_at;
+    if (!rawDate) return "Aujourd’hui";
+    try {
+      return new Date(rawDate).toLocaleDateString("fr-FR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+    } catch {
+      return "Aujourd’hui";
+    }
+  }
+
+  function getLevelInfo() {
+    const xp = Number(state.xp || 0);
+    const level = Math.max(1, Math.floor(xp / 500) + 1);
+    const current = xp % 500;
+    const next = 500;
+    const pct = Math.min(100, Math.round((current / next) * 100));
+    return { level, current, next, pct };
+  }
+
+  function getBestStreak() {
+    return Math.max(Number(state.bestStreak || 0), Number(state.streak || 0));
+  }
+
   function startChapterTest() {
     setChapterTest({ questions: chapterOneQuestions(), index: 0, answers: [], selected: "", finished: false });
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -862,92 +899,144 @@ function App() {
 
       {tab === "profile" && (
         <section className="screen active">
-          <div className="profile-hero card">
-            <div className="profile-avatar">
-              {(guestMode ? "I" : (profile?.username || state.name || "U")).slice(0,1).toUpperCase()}
-            </div>
-            <div className="profile-main">
-              <span className="tag">{guestMode ? "Mode invité" : "Compte connecté"}</span>
-              <div className="profile-title-row">
-                <h2>{guestMode ? (state.name || "Invité") : (profile?.username || session?.user?.email || "Utilisateur")}</h2>
-                <button
-                  type="button"
-                  className="icon-edit-btn"
-                  title="Modifier le pseudo"
-                  onClick={async () => {
-                    const currentName = guestMode ? (state.name || "Invité") : (profile?.username || "");
-                    const nextName = window.prompt("Nouveau pseudo", currentName);
-                    if (!nextName || !nextName.trim()) return;
-                    const cleanName = nextName.trim();
+          {(() => {
+            const levelInfo = getLevelInfo();
+            const lessonsDone = Object.keys(state.completedLessons || {}).length;
+            const totalLessons = LESSONS.length || 0;
 
-                    if (!guestMode && supabase && session?.user) {
-                      const { data, error } = await supabase
-                        .from("profiles")
-                        .upsert({ id: session.user.id, username: cleanName }, { onConflict: "id" })
-                        .select()
-                        .single();
+            return (
+              <>
+                <div className="profile-hero card profile-hero-premium">
+                  <div className="profile-avatar big-avatar">
+                    {(guestMode ? "I" : (profile?.username || state.name || "U")).slice(0,1).toUpperCase()}
+                  </div>
 
-                      if (!error) setProfile(data || { ...(profile || {}), username: cleanName });
-                    } else {
-                      setState((s) => ({ ...s, name: cleanName }));
-                    }
-                  }}
-                >
-                  ✎
-                </button>
-              </div>
-              <p>{guestMode ? "Progression locale uniquement." : "Progression sauvegardée sur ton compte."}</p>
-            </div>
-          </div>
+                  <div className="profile-main">
+                    <span className="tag">{guestMode ? "Mode invité" : "Compte connecté"}</span>
+                    <div className="profile-title-row">
+                      <h2>{guestMode ? (state.name || "Invité") : (profile?.username || session?.user?.email || "Utilisateur")}</h2>
+                      <button
+                        type="button"
+                        className="icon-edit-btn"
+                        title="Modifier le pseudo"
+                        onClick={async () => {
+                          const currentName = guestMode ? (state.name || "Invité") : (profile?.username || "");
+                          const nextName = window.prompt("Nouveau pseudo", currentName);
+                          if (!nextName || !nextName.trim()) return;
+                          const cleanName = nextName.trim();
 
-          {guestMode && (
-            <div className="guest-warning-card">
-              <h3>Mode invité</h3>
-              <p>Ta progression est enregistrée uniquement sur cet appareil.</p>
-              <p>Connecte-toi pour la retrouver sur ton téléphone et ton ordinateur.</p>
-              {hasSupabaseConfig && (
-                <button className="btn full" onClick={() => {
-                  localStorage.removeItem("better-english-entry");
-                  setGuestMode(false);
-                  setAuthMode("welcome");
-                }}>Créer un compte gratuitement</button>
-              )}
-            </div>
-          )}
+                          if (!guestMode && supabase && session?.user) {
+                            const { data, error } = await supabase
+                              .from("profiles")
+                              .upsert({ id: session.user.id, username: cleanName }, { onConflict: "id" })
+                              .select()
+                              .single();
 
-          <div className="profile-grid">
-            <div className="profile-stat-card"><b>{state.xp}</b><span>XP total</span></div>
-            <div className="profile-stat-card"><b>{Object.keys(state.completedLessons || {}).length}</b><span>Leçons terminées</span></div>
-            <div className="profile-stat-card"><b>{state.streak || 0}</b><span>Série</span></div>
-            <div className="profile-stat-card"><b>{state.correct || 0}</b><span>Bonnes réponses</span></div>
-            <div className="profile-stat-card"><b>{state.done || 0}</b><span>Exercices faits</span></div>
-            <div className="profile-stat-card"><b>{state.mistakes?.length || 0}</b><span>Erreurs à revoir</span></div>
-          </div>
+                            if (!error) setProfile(data || { ...(profile || {}), username: cleanName });
+                          } else {
+                            setState((s) => ({ ...s, name: cleanName }));
+                          }
+                        }}
+                      >
+                        ✎
+                      </button>
+                    </div>
+                    <p>{guestMode ? "Progression locale uniquement." : "Progression sauvegardée sur ton compte."}</p>
+                  </div>
+                </div>
 
-          <div className="card profile-actions">
-            <h3>Compte</h3>
-            {!guestMode ? (
-              <button className="btn secondary full" onClick={async () => {
-                await supabase.auth.signOut();
-                localStorage.removeItem("better-english-entry");
-                setGuestMode(false);
-                setSession(null);
-                setAuthMode("welcome");
-              }}>
-                Déconnexion
-              </button>
-            ) : (
-              hasSupabaseConfig && (
-                <button className="btn full" onClick={() => {
-                  localStorage.removeItem("better-english-entry");
-                  setGuestMode(false);
-                  setAuthMode("welcome");
-                }}>
-                  Créer un compte gratuitement
-                </button>
-              )
-            )}
-          </div>
+                {guestMode && (
+                  <div className="guest-warning-card">
+                    <h3>Mode invité</h3>
+                    <p>Ta progression est enregistrée uniquement sur cet appareil.</p>
+                    <p>Connecte-toi pour la retrouver sur ton téléphone et ton ordinateur.</p>
+                    {hasSupabaseConfig && (
+                      <button className="btn full" onClick={() => {
+                        localStorage.removeItem("better-english-entry");
+                        setGuestMode(false);
+                        setAuthMode("welcome");
+                      }}>Créer un compte gratuitement</button>
+                    )}
+                  </div>
+                )}
+
+                <div className="profile-grid premium-stats">
+                  <div className="profile-stat-card premium-stat">
+                    <small>🏆 Meilleure série</small>
+                    <b>{getBestStreak()}</b>
+                    <span>exercices sans faute</span>
+                  </div>
+
+                  <div className="profile-stat-card premium-stat">
+                    <small>⭐ XP totale</small>
+                    <b>{state.xp}</b>
+                    <span>XP gagnée</span>
+                  </div>
+
+                  <div className="profile-stat-card premium-stat">
+                    <small>📚 Leçons terminées</small>
+                    <b>{lessonsDone}/{totalLessons}</b>
+                    <span>dans le parcours actuel</span>
+                  </div>
+
+                  <div className="profile-stat-card premium-stat">
+                    <small>✏️ Exercices réalisés</small>
+                    <b>{state.done || 0}</b>
+                    <span>depuis le début</span>
+                  </div>
+                </div>
+
+                <div className="level-card card">
+                  <div className="level-head">
+                    <div>
+                      <span className="tag">🎖 Niveau</span>
+                      <h3>Niveau {levelInfo.level}</h3>
+                    </div>
+                    <b>{levelInfo.current}/{levelInfo.next} XP</b>
+                  </div>
+                  <div className="level-bar">
+                    <span style={{ width: `${levelInfo.pct}%` }} />
+                  </div>
+                </div>
+
+                <div className="profile-meta-grid">
+                  <div className="profile-meta-card">
+                    <span>⏱ Temps d'apprentissage</span>
+                    <b>{formatLearningTime()}</b>
+                  </div>
+                  <div className="profile-meta-card">
+                    <span>📅 Compte créé le</span>
+                    <b>{guestMode ? "Mode invité" : getCreatedDate()}</b>
+                  </div>
+                </div>
+
+                <div className="card profile-actions soft-actions">
+                  <h3>Compte</h3>
+                  {!guestMode ? (
+                    <button className="logout-link" onClick={async () => {
+                      await supabase.auth.signOut();
+                      localStorage.removeItem("better-english-entry");
+                      setGuestMode(false);
+                      setSession(null);
+                      setAuthMode("welcome");
+                    }}>
+                      Déconnexion
+                    </button>
+                  ) : (
+                    hasSupabaseConfig && (
+                      <button className="btn full" onClick={() => {
+                        localStorage.removeItem("better-english-entry");
+                        setGuestMode(false);
+                        setAuthMode("welcome");
+                      }}>
+                        Créer un compte gratuitement
+                      </button>
+                    )
+                  )}
+                </div>
+              </>
+            );
+          })()}
         </section>
       )}
       </>}

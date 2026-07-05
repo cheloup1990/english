@@ -1,15 +1,15 @@
-# Better English V10.8D
+# Better English V10.8E
 
-Version stable basée sur V10.8B.
-
-## Corrections demandées
-- Accueil : suppression du doublon entre "40 QCM par leçon" et "20 questions par quiz".
-- Accueil : textes des 4 cartes retravaillés.
-- Accueil : cartes un peu plus modernes.
-- Erreurs : suppression du texte inutile "Change le thème...".
-- Profil : ajout bouton stylo pour modifier le pseudo.
-- Profil : ajout de stats supplémentaires.
-- Message de compte créé plus propre.
-
-## Important
-Cette version évite les remplacements regex dangereux qui avaient cassé la V10.8C.
+## Profil redesign
+- Suppression de Bonnes réponses.
+- Suppression de Erreurs à revoir.
+- Stats principales :
+  - Meilleure série
+  - XP totale
+  - Leçons terminées
+  - Exercices réalisés
+- Ajout carte Niveau avec barre XP.
+- Ajout temps d'apprentissage estimé.
+- Ajout date de création du compte.
+- Déconnexion plus discrète.
+- Aucun pourcentage de réussite.
