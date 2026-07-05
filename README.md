@@ -1,18 +1,12 @@
-# Better English V10.6 — Leçon 2 Pronoms
+# Better English V10.6B
 
-## Ajouts
-- Leçon 2 transformée en vraie leçon interactive : Les pronoms.
-- Cours propre : I, you, he, she, it, we, they.
-- Banque de 40 QCM.
-- Quiz de 20 questions aléatoires.
-- Aucun doublon dans un même quiz.
-- Réponses mélangées.
-- Validation manuelle avec bouton Valider.
-- Sélection = contour violet uniquement.
-- Résultat final : score + étoiles + recommencer.
+Correction complète du quiz de la leçon 2 : Les pronoms.
 
-## Leçon 1
-- Conservation du quiz des lettres.
-- Groupes de confusion conservés.
-- A revient à l'audio natif.
-- Z garde l'audio caché zee.
+## Corrigé
+- Les 40 QCM pronoms ont été réécrits.
+- Plus de questions ambiguës comme "___ is on the table".
+- Chaque question donne un contexte clair.
+- Une seule bonne réponse possible.
+- Les explications sont plus naturelles et plus courtes.
+- Suppression du texte technique inutile avant le quiz.
+- Le quiz reste : 20 questions tirées parmi 40, sans doublon dans un même quiz.

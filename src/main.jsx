@@ -5,7 +5,7 @@ import { Home, PenLine, BookOpen, User } from "lucide-react";
 import { CARDS, THEMES, generateExercises, QUALITY_REPORT, normalize, LESSONS, CHAPTERS } from "./data";
 import "./styles.css";
 
-const KEY = "better-english-v10-6";
+const KEY = "better-english-v10-6b";
 
 const defaultState = {
   name: "Jeremy",
@@ -497,8 +497,8 @@ function App() {
         <section className="screen active">
           <div className="hero-card">
             <div className="hero-inner">
-              <div className="hero-label">V10.6HGdc.5a.5.4.3a</div>
-              <h2 className="hero-title">V10.6H</h2>
+              <div className="hero-label">V10.6BHGdc.5a.5.4.3a</div>
+              <h2 className="hero-title">V10.6BH</h2>
               <p className="hero-sub">Better English apprend l’anglais qu’on rencontre dans la vraie vie, pas l’anglais des manuels scolaires.</p>
               <div className="progress"><span style={{ width: `${state.xp % 100}%` }} /></div>
               <button className="btn full" onClick={() => setTab("exercise")}>Continuer</button>
@@ -1004,7 +1004,6 @@ function LessonQcmQuiz({ bank, size = 20 }) {
     return (
       <div className="lesson-qcm-card">
         <div className="section-title"><h3>Quiz de la leçon</h3><span className="tag">20 questions</span></div>
-        <p className="muted">20 questions aléatoires parmi 40. Aucun doublon dans un même quiz.</p>
         <button type="button" className="btn full" onClick={startQuiz}>Commencer le quiz</button>
       </div>
     );
