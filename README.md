@@ -1,12 +1,15 @@
-# Better English V10.6B
+# Better English V10.8D
 
-Correction complète du quiz de la leçon 2 : Les pronoms.
+Version stable basée sur V10.8B.
 
-## Corrigé
-- Les 40 QCM pronoms ont été réécrits.
-- Plus de questions ambiguës comme "___ is on the table".
-- Chaque question donne un contexte clair.
-- Une seule bonne réponse possible.
-- Les explications sont plus naturelles et plus courtes.
-- Suppression du texte technique inutile avant le quiz.
-- Le quiz reste : 20 questions tirées parmi 40, sans doublon dans un même quiz.
+## Corrections demandées
+- Accueil : suppression du doublon entre "40 QCM par leçon" et "20 questions par quiz".
+- Accueil : textes des 4 cartes retravaillés.
+- Accueil : cartes un peu plus modernes.
+- Erreurs : suppression du texte inutile "Change le thème...".
+- Profil : ajout bouton stylo pour modifier le pseudo.
+- Profil : ajout de stats supplémentaires.
+- Message de compte créé plus propre.
+
+## Important
+Cette version évite les remplacements regex dangereux qui avaient cassé la V10.8C.

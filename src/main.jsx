@@ -4,8 +4,9 @@ import { createRoot } from "react-dom/client";
 import { Home, PenLine, BookOpen, User } from "lucide-react";
 import { CARDS, THEMES, generateExercises, QUALITY_REPORT, normalize, LESSONS, CHAPTERS } from "./data";
 import "./styles.css";
+import { supabase, hasSupabaseConfig } from "./lib/supabase";
 
-const KEY = "better-english-v10-6b";
+const KEY = "better-english-v10-8d";
 
 const defaultState = {
   name: "Jeremy",
@@ -209,6 +210,20 @@ const TYPE_LABELS = {
 const DIFF_LABELS = { all: "Tout", easy: "Simple", medium: "Moyen", hard: "Dur" };
 const DIR_LABELS = { mix: "Mix", "fr-en": "FR → EN", "en-fr": "EN → FR" };
 
+const HOME_FEATURES = [
+  { title: "Apprendre", text: "Des leçons courtes pour comprendre sans te perdre." },
+  { title: "Valider", text: "Un quiz à la fin de chaque leçon pour vérifier que c’est acquis." },
+  { title: "S’entraîner", text: "Traduction, QCM, conjugaison et phrases utiles au quotidien." },
+  { title: "Continuer partout", text: "Ta progression te suit sur téléphone et ordinateur." },
+];
+
+const HOME_STATS = [
+  ["300+", "exercices"],
+  ["2", "leçons prêtes"],
+  ["20", "questions par leçon"],
+];
+
+
 function App() {
   const [tab, setTab] = useState("home");
   const [state, setState] = useState(loadState);
@@ -217,6 +232,13 @@ function App() {
   const [selected, setSelected] = useState("");
   const [feedback, setFeedback] = useState(null);
   const [chapterTest, setChapterTest] = useState(null);
+  const [session, setSession] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [authMode, setAuthMode] = useState("welcome");
+  const [authLoading, setAuthLoading] = useState(Boolean(hasSupabaseConfig));
+  const [authError, setAuthError] = useState("");
+  const [syncStatus, setSyncStatus] = useState("local");
+  const [guestMode, setGuestMode] = useState(() => localStorage.getItem("better-english-entry") === "guest");
   const [filterOpen, setFilterOpen] = useState("theme");
   const [nameInput, setNameInput] = useState(state.name);
   const [navHidden, setNavHidden] = useState(false);
@@ -339,6 +361,124 @@ function App() {
       priority: 100
     }));
   }
+
+
+  async function loadRemoteProgress(userId) {
+    if (!supabase || !userId) return;
+    setSyncStatus("loading");
+
+    const { data, error } = await supabase
+      .from("progress")
+      .select("*")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    if (error) {
+      console.warn("Progress load error:", error);
+      setSyncStatus("error");
+      return;
+    }
+
+    if (data?.data) {
+      setState((local) => ({ ...local, ...data.data }));
+    } else {
+      await supabase.from("progress").upsert({
+        user_id: userId,
+        data: state,
+        updated_at: new Date().toISOString(),
+      });
+    }
+
+    setSyncStatus("synced");
+  }
+
+  async function loadProfile(user) {
+    if (!supabase || !user) return;
+
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (data && !error) {
+      setProfile(data);
+      return;
+    }
+
+    const username = user.user_metadata?.username || user.email?.split("@")[0] || "Utilisateur";
+    const { data: created } = await supabase
+      .from("profiles")
+      .upsert({ id: user.id, username }, { onConflict: "id" })
+      .select()
+      .single();
+
+    setProfile(created || { id: user.id, username });
+  }
+
+  useEffect(() => {
+    if (!supabase) {
+      setAuthLoading(false);
+      return;
+    }
+
+    let alive = true;
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (!alive) return;
+      const nextSession = data.session || null;
+      setSession(nextSession);
+
+      if (nextSession?.user) {
+        setGuestMode(false);
+        localStorage.setItem("better-english-entry", "account");
+        loadProfile(nextSession.user);
+        loadRemoteProgress(nextSession.user.id);
+      }
+
+      setAuthLoading(false);
+    });
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setSession(nextSession || null);
+
+      if (nextSession?.user) {
+        setGuestMode(false);
+        localStorage.setItem("better-english-entry", "account");
+        loadProfile(nextSession.user);
+        loadRemoteProgress(nextSession.user.id);
+      } else {
+        setProfile(null);
+        if (localStorage.getItem("better-english-entry") !== "guest") {
+          localStorage.removeItem("better-english-entry");
+        }
+      }
+    });
+
+    return () => {
+      alive = false;
+      listener?.subscription?.unsubscribe?.();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!supabase || !session?.user || guestMode) return;
+
+    const timeout = setTimeout(async () => {
+      setSyncStatus("saving");
+
+      const { error } = await supabase.from("progress").upsert({
+        user_id: session.user.id,
+        data: state,
+        updated_at: new Date().toISOString(),
+      });
+
+      setSyncStatus(error ? "error" : "synced");
+    }, 700);
+
+    return () => clearTimeout(timeout);
+  }, [state, session?.user?.id, guestMode]);
+
 
   function startChapterTest() {
     setChapterTest({ questions: chapterOneQuestions(), index: 0, answers: [], selected: "", finished: false });
@@ -468,10 +608,38 @@ function App() {
     ["profile", "Profil", User],
   ];
 
+
+  if (authLoading) {
+    return (
+      <div className="auth-shell">
+        <div className="auth-card">
+          <h1>Better English</h1>
+          <p>Vérification du compte...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!session && !guestMode) {
+    return (
+      <AuthScreen
+        mode={authMode}
+        setMode={setAuthMode}
+        error={authError}
+        setError={setAuthError}
+        onGuest={() => {
+          localStorage.setItem("better-english-entry", "guest");
+          setGuestMode(true);
+          setAuthMode("welcome");
+        }}
+      />
+    );
+  }
+
   return (
     <div className="app">
       <header className="header">
-        <div className="brand"><h1>Better English</h1><p>Bonjour {state.name}</p></div>
+        <div className="brand"><h1>Better English</h1><p>{guestMode ? "Mode invité" : `Bonjour ${profile?.username || state.name}`}</p></div>
         <div className="streak-pill">{state.streak} série</div>
       </header>
 
@@ -495,21 +663,49 @@ function App() {
 
       {tab === "home" && (
         <section className="screen active">
-          <div className="hero-card">
-            <div className="hero-inner">
-              <div className="hero-label">V10.6BHGdc.5a.5.4.3a</div>
-              <h2 className="hero-title">V10.6BH</h2>
-              <p className="hero-sub">Better English apprend l’anglais qu’on rencontre dans la vraie vie, pas l’anglais des manuels scolaires.</p>
-              <div className="progress"><span style={{ width: `${state.xp % 100}%` }} /></div>
-              <button className="btn full" onClick={() => setTab("exercise")}>Continuer</button>
+          <div className="home-hero card">
+            <span className="tag">A1 · Better English</span>
+            <h2>Apprends l'anglais avec des leçons simples et des exercices propres.</h2>
+            <p>Avance leçon par leçon, valide tes acquis avec des QCM clairs, puis entraîne-toi avec des exercices variés.</p>
+
+            <div className="home-stats">
+              {HOME_STATS.map(([value, label]) => (
+                <div key={label}>
+                  <b>{value}</b>
+                  <span>{label}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="row">
+              <button className="btn" onClick={() => setTab("courses")}>Voir les leçons</button>
+              <button className="btn secondary" onClick={() => setTab("exercise")}>S'entraîner</button>
             </div>
           </div>
-          <div className="grid2">
-            <Stat value={CARDS.length} label="fiches" />
-            <Stat value={QUALITY_REPORT.exercises} label="exos possibles" />
-            <Stat value={QUALITY_REPORT.qcm} label="QCM" />
-            <Stat value={`${accuracy}%`} label="précision" />
+
+          <div className="home-feature-grid">
+            {HOME_FEATURES.map((feature) => (
+              <div className="home-feature-card" key={feature.title}>
+                <h3>{feature.title}</h3>
+                <p>{feature.text}</p>
+              </div>
+            ))}
           </div>
+
+          {guestMode && (
+            <div className="guest-warning-card">
+              <h3>Mode invité</h3>
+              <p>Ta progression est enregistrée uniquement sur cet appareil.</p>
+              <p>Connecte-toi pour la retrouver sur ton téléphone et ton ordinateur.</p>
+              {hasSupabaseConfig && (
+                <button className="btn full" onClick={() => {
+                  localStorage.removeItem("better-english-entry");
+                  setGuestMode(false);
+                  setAuthMode("welcome");
+                }}>Créer un compte gratuitement</button>
+              )}
+            </div>
+          )}
         </section>
       )}
 
@@ -566,8 +762,8 @@ function App() {
             {!current ? (
               <>
                 <h2 className="chapter-title">{state.mode === "errors" ? "Aucune erreur" : "Aucun exercice propre"}</h2>
-                <h3 className="question">{state.mode === "errors" ? "Tu n’as aucune vraie erreur à revoir." : "Aucun exercice ne correspond à ces critères."}</h3>
-                <p className="muted">Change le thème, le type, le sens ou la difficulté.</p>
+                <h3 className="question">{state.mode === "errors" ? "Tu n’as aucune erreur à revoir." : "Aucun exercice ne correspond à ces critères."}</h3>
+                <p className="muted"></p>
               </>
             ) : (
               <>
@@ -666,18 +862,91 @@ function App() {
 
       {tab === "profile" && (
         <section className="screen active">
-          <div className="card profile-hero">
-            <div className="avatar">{(state.name || "J").slice(0,1).toUpperCase()}</div>
-            <h2 className="profile-name">{state.name}</h2>
-            <p className="profile-sub">Niveau {level}</p>
-            <input className="profile-input" value={nameInput} onChange={e=>setNameInput(e.target.value)} placeholder="Ton nom" />
-            <button className="btn full" style={{marginTop:10}} onClick={()=>setState(s=>({...s,name:nameInput.trim()||s.name}))}>Changer le nom</button>
+          <div className="profile-hero card">
+            <div className="profile-avatar">
+              {(guestMode ? "I" : (profile?.username || state.name || "U")).slice(0,1).toUpperCase()}
+            </div>
+            <div className="profile-main">
+              <span className="tag">{guestMode ? "Mode invité" : "Compte connecté"}</span>
+              <div className="profile-title-row">
+                <h2>{guestMode ? (state.name || "Invité") : (profile?.username || session?.user?.email || "Utilisateur")}</h2>
+                <button
+                  type="button"
+                  className="icon-edit-btn"
+                  title="Modifier le pseudo"
+                  onClick={async () => {
+                    const currentName = guestMode ? (state.name || "Invité") : (profile?.username || "");
+                    const nextName = window.prompt("Nouveau pseudo", currentName);
+                    if (!nextName || !nextName.trim()) return;
+                    const cleanName = nextName.trim();
+
+                    if (!guestMode && supabase && session?.user) {
+                      const { data, error } = await supabase
+                        .from("profiles")
+                        .upsert({ id: session.user.id, username: cleanName }, { onConflict: "id" })
+                        .select()
+                        .single();
+
+                      if (!error) setProfile(data || { ...(profile || {}), username: cleanName });
+                    } else {
+                      setState((s) => ({ ...s, name: cleanName }));
+                    }
+                  }}
+                >
+                  ✎
+                </button>
+              </div>
+              <p>{guestMode ? "Progression locale uniquement." : "Progression sauvegardée sur ton compte."}</p>
+            </div>
           </div>
-          <div className="grid2">
-            <Stat value={state.xp} label="XP" />
-            <Stat value={`${accuracy}%`} label="précision" />
-            <Stat value={state.done} label="réponses" />
-            <Stat value={state.mistakes.length} label="erreurs" />
+
+          {guestMode && (
+            <div className="guest-warning-card">
+              <h3>Mode invité</h3>
+              <p>Ta progression est enregistrée uniquement sur cet appareil.</p>
+              <p>Connecte-toi pour la retrouver sur ton téléphone et ton ordinateur.</p>
+              {hasSupabaseConfig && (
+                <button className="btn full" onClick={() => {
+                  localStorage.removeItem("better-english-entry");
+                  setGuestMode(false);
+                  setAuthMode("welcome");
+                }}>Créer un compte gratuitement</button>
+              )}
+            </div>
+          )}
+
+          <div className="profile-grid">
+            <div className="profile-stat-card"><b>{state.xp}</b><span>XP total</span></div>
+            <div className="profile-stat-card"><b>{Object.keys(state.completedLessons || {}).length}</b><span>Leçons terminées</span></div>
+            <div className="profile-stat-card"><b>{state.streak || 0}</b><span>Série</span></div>
+            <div className="profile-stat-card"><b>{state.correct || 0}</b><span>Bonnes réponses</span></div>
+            <div className="profile-stat-card"><b>{state.done || 0}</b><span>Exercices faits</span></div>
+            <div className="profile-stat-card"><b>{state.mistakes?.length || 0}</b><span>Erreurs à revoir</span></div>
+          </div>
+
+          <div className="card profile-actions">
+            <h3>Compte</h3>
+            {!guestMode ? (
+              <button className="btn secondary full" onClick={async () => {
+                await supabase.auth.signOut();
+                localStorage.removeItem("better-english-entry");
+                setGuestMode(false);
+                setSession(null);
+                setAuthMode("welcome");
+              }}>
+                Déconnexion
+              </button>
+            ) : (
+              hasSupabaseConfig && (
+                <button className="btn full" onClick={() => {
+                  localStorage.removeItem("better-english-entry");
+                  setGuestMode(false);
+                  setAuthMode("welcome");
+                }}>
+                  Créer un compte gratuitement
+                </button>
+              )
+            )}
           </div>
         </section>
       )}
@@ -1112,5 +1381,130 @@ function ChapterTestView({ test, onSelect, onNext, onFinish, onClose }) {
     </div>
   );
 }
+
+
+function AuthScreen({ mode, setMode, error, setError, onGuest }) {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [username, setUsername] = React.useState("");
+  const [message, setMessage] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+
+  async function signUp(e) {
+    e.preventDefault();
+    setError("");
+    setMessage("");
+    setLoading(true);
+
+    const cleanUsername = username.trim() || email.split("@")[0];
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { username: cleanUsername } },
+    });
+
+    if (error) {
+      setError(error.message);
+    } else {
+      if (data.user) {
+        await supabase.from("profiles").upsert({ id: data.user.id, username: cleanUsername }, { onConflict: "id" });
+      }
+      setMessage("Compte créé avec succès. Vérifie ta boîte e-mail si une confirmation est demandée.");
+    }
+
+    setLoading(false);
+  }
+
+  async function signIn(e) {
+    e.preventDefault();
+    setError("");
+    setMessage("");
+    setLoading(true);
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) setError(error.message);
+
+    setLoading(false);
+  }
+
+  async function resetPassword(e) {
+    e.preventDefault();
+    setError("");
+    setMessage("");
+    setLoading(true);
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin,
+    });
+
+    if (error) setError(error.message);
+    else setMessage("E-mail de réinitialisation envoyé.");
+
+    setLoading(false);
+  }
+
+  if (!hasSupabaseConfig) {
+    return (
+      <div className="auth-shell">
+        <div className="auth-card">
+          <h1>Better English</h1>
+          <p>Supabase n'est pas encore configuré. Tu peux continuer en invité.</p>
+          <button className="btn full" onClick={onGuest}>Continuer en invité</button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="auth-shell">
+      <div className="auth-card">
+        <h1>Better English</h1>
+        <p className="muted">Apprends l'anglais chaque jour.</p>
+
+        {mode === "welcome" && (
+          <>
+            <button className="btn full" onClick={() => setMode("login")}>Se connecter</button>
+            <button className="btn secondary full" onClick={() => setMode("signup")}>Créer un compte</button>
+            <div className="auth-separator"><span></span><b>ou</b><span></span></div>
+            <button className="ghost-btn" onClick={onGuest}>Continuer en invité</button>
+          </>
+        )}
+
+        {mode === "login" && (
+          <form onSubmit={signIn} className="auth-form">
+            <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Adresse e-mail" type="email" required />
+            <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Mot de passe" type="password" required />
+            <button className="btn full" disabled={loading}>{loading ? "Connexion..." : "Se connecter"}</button>
+            <button type="button" className="ghost-btn" onClick={() => setMode("forgot")}>Mot de passe oublié ?</button>
+            <button type="button" className="ghost-btn" onClick={() => setMode("welcome")}>Retour</button>
+          </form>
+        )}
+
+        {mode === "signup" && (
+          <form onSubmit={signUp} className="auth-form">
+            <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Pseudo" required />
+            <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Adresse e-mail" type="email" required />
+            <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Mot de passe" type="password" required minLength={6} />
+            <button className="btn full" disabled={loading}>{loading ? "Création..." : "Créer mon compte"}</button>
+            <button type="button" className="ghost-btn" onClick={() => setMode("welcome")}>Retour</button>
+          </form>
+        )}
+
+        {mode === "forgot" && (
+          <form onSubmit={resetPassword} className="auth-form">
+            <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Adresse e-mail" type="email" required />
+            <button className="btn full" disabled={loading}>{loading ? "Envoi..." : "Envoyer le lien"}</button>
+            <button type="button" className="ghost-btn" onClick={() => setMode("login")}>Retour connexion</button>
+          </form>
+        )}
+
+        {error && <p className="auth-error">{error}</p>}
+        {message && <p className="auth-message">{message}</p>}
+      </div>
+    </div>
+  );
+}
+
 
 createRoot(document.getElementById("root")).render(<App />);
